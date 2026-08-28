@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>👑 Dhan Varsha Club</title>
     
+    <!-- पुराना कैश तुरंत डिलीट करने का कोड -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+                for (let r of registrations) r.unregister();
+            });
+        }
+        if ('caches' in window) {
+            caches.keys().then(names => {
+                for (let name of names) caches.delete(name);
+            });
+        }
+    </script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -41,7 +55,6 @@
             position: relative;
         }
 
-        /* Hero */
         .brand-hero { text-align: center; padding: 15px 0; }
         .logo-wrap {
             width: 65px; height: 65px; margin: 0 auto 8px; border-radius: 20px;
@@ -54,7 +67,6 @@
             color: var(--gold); margin-bottom: 2px;
         }
 
-        /* Cards */
         .ui-card {
             background: var(--surface); border: 1px solid var(--border);
             border-radius: 18px; padding: 16px; margin-bottom: 14px;
@@ -82,7 +94,6 @@
             background: #25d366 !important; color: #fff !important;
         }
 
-        /* Top Bar */
         .top-navbar {
             display: flex; justify-content: space-between; align-items: center;
             background: var(--surface); border: 1px solid var(--border);
@@ -91,7 +102,6 @@
         .user-greeting { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
         .top-balance { display: flex; align-items: center; gap: 6px; background: rgba(0, 255, 135, 0.15); color: var(--green); padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: 800; border: 1px solid rgba(0, 255, 135, 0.3); }
 
-        /* Jackpot Dial */
         .arena-wrapper {
             position: relative; width: 210px; height: 210px; margin: 10px auto 16px;
             display: flex; align-items: center; justify-content: center;
@@ -104,7 +114,6 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.6); cursor: pointer;
         }
 
-        /* Tabs */
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
@@ -120,7 +129,6 @@
             border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; margin-bottom: 8px; font-size: 13px;
         }
 
-        /* Bottom Nav */
         .bottom-nav {
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
             width: 100%; max-width: 460px; background: #0a0e18;
@@ -365,12 +373,4 @@
         authDomain: "dhan-varsha-club.firebaseapp.com",
         databaseURL: "https://dhan-varsha-club-default-rtdb.firebaseio.com",
         projectId: "dhan-varsha-club",
-        storageBucket: "dhan-varsha-club.firebasestorage.app",
-        messagingSenderId: "321838766271",
-        appId: "1:321838766271:web:357aec639b771d3cf9ce0a"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    let MERCHANT_UPI = "BHARATPE2Z0I0Q6H3P14940@unitype"; 
-    let MERCHANT_NAME = "ANKUR
+        storageBucket
