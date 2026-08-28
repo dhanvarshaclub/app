@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👑 Admin Master Control | Dhan Varsha Club</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <style>
+        :root {
+            --bg-base: #070a12;
+            --surface: #121a2c;
+            --gold: #ffc837;
+            --green: #00ff87;
+            --red: #ff4757;
+            --cyan: #00f2fe;
+            --text-light: #f8fafc;
+            --text-sub: #94a3b8;
+            --border: rgba(255, 215, 0, 0.2);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        body { background-color: var(--bg-base); color: var(--text-light); padding: 15px; }
+
+        .container { max-width: 1050px; margin: 0 auto; }
+        
+        /* Lock Screen */
+        #adminLockScreen {
+            position: fixed; inset: 0; background: var(--bg-base); z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .login-card {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 30px; border-radius: 20px; width: 100%; max-width: 360px; text-align: center;
+        }
+
+        .box {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; padding: 18px; margin-bottom: 20px;
+        }
+        .box-title {
+            font-size: 16px; font-weight: 800; color: var(--gold);
+            margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;
+        }
+
+        /* Tables */
+        .table-responsive { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+        th, td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        th { color: var(--text-sub); font-weight: 700; background: rgba(0,0,0,0.2); }
+        
+        /* Form Inputs & Buttons */
+        .input-box {
+            padding: 10px 12px; background: rgba(0,0,0,0.4); border: 1px solid var(--border);
+            border-radius: 8px; color: #fff; font-size: 13px; outline: none; width: 100%; margin-bottom: 10px;
+        }
+        .form-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;
+        }
+        .btn {
+            padding: 8px 14px; border: none; border-radius: 8px; font-weight: 700;
+            font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;
+        }
+        .btn-green { background: var(--green); color: #000; }
+        .btn-red { background: var(--red); color: #fff; }
+        .btn-gold { background: var(--gold); color: #000; }
+        .btn-blue { background: #3b82f6; color: #fff; }
+
+        .badge-blocked { background: rgba(255,71,87,0.2); color: var(--red); padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+        .badge-active { background: rgba(0,255,135,0.2); color: var(--green); padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. ADMIN LOCK SCREEN -->
+    <div id="adminLockScreen">
+        <div class="login-card">
+            <i class="fas fa-shield-alt" style="font-size:42px; color:var(--gold); margin-bottom:12px;"></i>
+            <h2 style="margin-bottom:6px; font-size:20px;">एडमिन सिक्योरिटी</h2>
+            <p style="font-size:12px; color:var(--text-sub); margin-bottom:16px;">मास्टर पासवर्ड / पिन दर्ज करें</p>
+            <input type="password" id="adminPinInput" class="input-box" placeholder="Admin PIN (7777)" maxlength="10" style="text-align:center; font-size:18px; letter-spacing:3px;">
+            <button class="btn btn-gold" style="width:100%; padding:12px; justify-content:center;" onclick="verifyAdminPin()">पैनल अनलॉक करें ➔</button>
+        </div>
+    </div>
+
+    <!-- 2. ADMIN MAIN DASHBOARD -->
+    <div class="container" id="adminMainContent" style="display:none;">
+        
+        <!-- Header -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <div>
+                <h1 style="font-size:22px; font-family:'Cabinet Grotesk'; color:var(--gold);">👑 DHAN VARSHA MASTER ADMIN</h1>
+                <small style="color:var(--text-sub);">फुल सिस्टम कंट्रोल & सेटिंग्स</small>
+            </div>
+            <button class="btn btn-red" onclick="adminLogout()"><i class="fas fa-power-off"></i> लॉक करें</button>
+        </div>
+
+        <!-- SECTION 1: GLOBAL SETTINGS -->
+        <div class="box">
+            <div class="box-title">
+                <span>⚙️ ऐप सेटिंग्स & पेमेंट QR कंट्रोल (No Code Required)</span>
+                <button class="btn btn-green" onclick="saveAppSettings()"><i class="fas fa-save"></i> सेटिंग्स सेव करें</button>
+            </div>
+            <div class="form-grid">
+                <div>
+                    <label style="font-size:11px; color:var(--text-sub); display:block; margin-bottom:4px;">मर्चेंट UPI ID (पेमेंट रिसीव करने के लिए):</label>
+                    <input type="text" id="setMerchantUpi" class="input-box" placeholder="उदा. yourname@upi">
+                </div>
+                <div>
+                    <label style="font-size:11px; color:var(--text-sub); display:block; margin-bottom:4px;">मर्चेंट का नाम (Merchant Name):</label>
+                    <input type="text" id="setMerchantName" class="input-box" placeholder="उदा. ANKUR">
+                </div>
+                <div>
+                    <label style="font-size:11px; color:var(--text-sub); display:block; margin-bottom:4px;">कस्टम QR कोड इमेज लिंक (वैकल्पिक):</label>
+                    <input type="text" id="setCustomQr" class="input-box" placeholder="खाली छोड़ें या इमेज URL डालें">
+                </div>
+                <div>
+                    <label style="font-size:11px; color:var(--text-sub); display:block; margin-bottom:4px;">नया एडमिन पासवर्ड / पिन बदलें:</label>
+                    <input type="text" id="setAdminPin" class="input-box" placeholder="नया गुप्त पासवर्ड डालें">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: UTR APPROVALS -->
+        <div class="box">
+            <div class="box-title">
+                <span>📥 पेंडिंग एंट्री रिक्वेस्ट्स (UTR Approvals)</span>
+                <small style="color:var(--cyan); font-weight:600;">₹50 Entry Pool</small>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>यूज़र का नाम</th>
+                            <th>मोबाइल नंबर</th>
+                            <th>UTR / Ref No.</th>
+                            <th>रेफरर</th>
+                            <th>एक्शन</th>
+                        </tr>
+                    </thead>
+                    <tbody id="utrTableBody">
+                        <tr><td colspan="5" style="text-align:center; color:var(--text-sub);">कोई पेंडिंग UTR रिक्वेस्ट नहीं है।</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SECTION 3: WINNER CONTROL -->
+        <div class="box">
+            <div class="box-title">
+                <span>🎯 जैकपॉट विनर कंट्रोल (Pool: <span id="poolCountText" style="color:var(--green);">0</span> / 50)</span>
+            </div>
+            
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:15px; margin-bottom:15px;">
+                <div style="background:rgba(0,0,0,0.25); padding:12px; border-radius:10px; border:1px dashed var(--gold);">
+                    <strong style="font-size:13px; color:var(--gold); display:block; margin-bottom:8px;">🎯 मैनुअल विनर सेट करें</strong>
+                    <select id="manualUserSelect" class="input-box" style="margin-bottom:8px;">
+                        <option value="">-- एक्टिव खिलाड़ी चुनें --</option>
+                    </select>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn btn-gold" style="flex:1;" onclick="setManualWinner(1)">🥇 1st (₹500)</button>
+                        <button class="btn btn-blue" style="flex:1;" onclick="setManualWinner(2)">🥈 2nd (₹250)</button>
+                    </div>
+                </div>
+
+                <div style="background:rgba(0,0,0,0.25); padding:12px; border-radius:10px; border:1px dashed var(--green); display:flex; flex-direction:column; justify-content:center;">
+                    <strong style="font-size:13px; color:var(--green); display:block; margin-bottom:6px;">⚡ ऑटोमैटिक 10 विजेता निकालें</strong>
+                    <p style="font-size:11px; color:var(--text-sub); margin-bottom:10px;">सिस्टम रैंडमली 10 विजेताओं को वॉलेट में पैसे बाँट देगा।</p>
+                    <button class="btn btn-green" id="btnAutoDraw" onclick="autoDrawWinners()" style="justify-content:center; padding:10px;">🎲 लकी ड्रॉ चालू करें</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: USER CONTROL -->
+        <div class="box">
+            <div class="box-title">
+                <span>👥 सभी मेंबर्स मैनेजमेंट (User Control)</span>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn btn-gold" onclick="addNewMemberPrompt()"><i class="fas fa-user-plus"></i> नया मेंबर</button>
+                    <input type="text" id="userSearchInp" class="input-box" placeholder="खोजें..." onkeyup="filterUsers()" style="padding:4px 8px; font-size:12px; width:160px; margin-bottom:0;">
+                </div>
+            </div>
+            <div class="table-responsive" style="max-height: 300px;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>नाम</th>
+                            <th>मोबाइल</th>
+                            <th>पिन</th>
+                            <th>बैलेंस</th>
+                            <th>स्टेटस</th>
+                            <th>एक्शन</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <tr><td colspan="6" style="text-align:center; color:var(--text-sub);">कोई मेंबर रजिस्टर नहीं है।</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SECTION 5: WITHDRAWALS -->
+        <div class="box">
+            <div class="box-title">
+                <span>💸 पेंडिंग UPI विड्रॉल (Payout Requests)</span>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>यूज़र</th>
+                            <th>मोबाइल</th>
+                            <th>राशि</th>
+                            <th>UPI ID</th>
+                            <th>एक्शन</th>
+                        </tr>
+                    </thead>
+                    <tbody id="withdrawTableBody">
+                        <tr><td colspan="5" style="text-align:center; color:var(--text-sub);">कोई पेंडिंग विड्रॉल नहीं है।</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyCvd7txLRNzf6U75N6WBMCX-iHmQ0u30eM",
+        authDomain: "dhan-varsha-club.firebaseapp.com",
+        databaseURL: "https://dhan-varsha-club-default-rtdb.firebaseio.com",
+        projectId: "dhan-varsha-club",
+        storageBucket: "dhan-varsha-club.firebasestorage.app",
+        messagingSenderId: "321838766271",
+        appId: "1:321838766271:web:357aec639b771d3cf9ce0a"
+    };
+    
+    let db = null;
+    try {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+    } catch(e) {
+        console.log("Firebase init error:", e);
+    }
+
+    let currentAdminPin = "7777";
+    let allUsersData = {};
+    let activePoolPlayers = [];
+
+    // Local Storage se saved pin check karein
+    const localSavedPin = localStorage.getItem('dvc_admin_saved_pin');
+    if(localSavedPin) {
+        currentAdminPin = localSavedPin;
+    }
+
+    function verifyAdminPin() {
+        const inputPin = document.getElementById('adminPinInput').value.trim();
+        
+        // Direct PIN Match (No Delay / No Block)
+        if(inputPin === currentAdminPin || inputPin === "7777") {
+            sessionStorage.setItem('dvc_admin_logged', 'true');
+            document.getElementById('adminLockScreen').style.display = 'none';
+            document.getElementById('adminMainContent').style.display = 'block';
+            if(db) loadAdminData();
+        } else {
+            alert("गलत पासवर्ड / पिन! सही पिन दर्ज करें। (Default: 7777)");
+            document.getElementById('adminPinInput').value = '';
+        }
+    }
+
+    function adminLogout() {
+        sessionStorage.removeItem('dvc_admin_logged');
+        location.reload();
+    }
+
+    window.addEventListener('load', () => {
+        if(sessionStorage.getItem('dvc_admin_logged') === 'true') {
+            document.getElementById('adminLockScreen').style.display = 'none';
+            document.getElementById('adminMainContent').style.display = 'block';
+            if(db) loadAdminData();
+        }
+        
+        // Background me Firebase se naya pin update check karein
+        if(db) {
+            db.ref('app_settings/adminPin').on('value', snap => {
+                if(snap.exists() && snap.val()) {
+                    currentAdminPin = snap.val();
+                    localStorage.setItem('dvc_admin_saved_pin', currentAdminPin);
+                }
+            });
+        }
+    });
+
+    function loadAdminData() {
+        loadSettings();
+        listenUTRs();
+        listenActivePool();
+        listenUsers();
+        listenWithdrawals();
+    }
+
+    function loadSettings() {
+        db.ref('app_settings').on('value', snap => {
+            const s = snap.val() || {};
+            document.getElementById('setMerchantUpi').value = s.merchantUpi || "BHARATPE2Z0I0Q6H3P14940@unitype";
+            document.getElementById('setMerchantName').value = s.merchantName || "ANKUR";
+            document.getElementById('setCustomQr').value = s.customQr || "";
+            document.getElementById('setAdminPin').value = s.adminPin || currentAdminPin;
+        });
+    }
+
+    function saveAppSettings() {
+        const upi = document.getElementById('setMerchantUpi').value.trim();
+        const name = document.getElementById('setMerchantName').value.trim();
+        const qr = document.getElementById('setCustomQr').value.trim();
+        const pin = document.getElementById('setAdminPin').value.trim();
+
+        if(!upi || !name || !pin) return alert("कृपया सभी जरूरी सेटिंग्स भरें!");
+
+        currentAdminPin = pin;
+        localStorage.setItem('dvc_admin_saved_pin', pin);
+
+        db.ref('app_settings').set({
+            merchantUpi: upi,
+            merchantName: name,
+            customQr: qr,
+            adminPin: pin
+        }).then(() => {
+            alert("सेटिंग्स और नया एडमिन पिन सफलतापूर्वक अपडेट हो गया!");
+        });
+    }
+
+    function listenUTRs() {
+        db.ref('pool_requests').on('value', snap => {
+            const tbody = document.getElementById('utrTableBody');
+            tbody.innerHTML = '';
+            let count = 0;
+            snap.forEach(c => {
+                const req = c.val();
+                if(req.status === 'pending') {
+                    count++;
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${req.name}</strong></td>
+                            <td>${req.phone}</td>
+                            <td><strong style="color:var(--gold);">${req.utr}</strong></td>
+                            <td>${req.referredBy || 'None'}</td>
+                            <td>
+                                <button class="btn btn-green" onclick="approveUTR('${req.utr}', '${req.phone}', '${req.name}', '${req.referredBy}')"><i class="fas fa-check"></i> Approve</button>
+                                <button class="btn btn-red" onclick="rejectUTR('${req.utr}')"><i class="fas fa-times"></i> Reject</button>
+                            </td>
+                        </tr>
+                    `;
+                }
+            });
+            if(count === 0) tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-sub);">कोई पेंडिंग UTR रिक्वेस्ट नहीं है।</td></tr>`;
+        });
+    }
+
+    function approveUTR(utr, phone, name, referredBy) {
+        db.ref('pool_requests/' + utr + '/status').set('approved');
+        db.ref('active_pool/' + phone).set({ phone, name, joinedAt: Date.now() });
+
+        if(referredBy && referredBy !== 'null' && referredBy !== '') {
+            const refBal = db.ref('users/' + referredBy + '/balance');
+            refBal.once('value', s => {
+                refBal.set((s.val() || 0) + 5.00);
+            });
+        }
+    }
+
+    function rejectUTR(utr) {
+        db.ref('pool_requests/' + utr + '/status').set('rejected');
+    }
+
+    function listenActivePool() {
+        db.ref('active_pool').on('value', snap => {
+            activePoolPlayers = [];
+            const selectBox = document.getElementById('manualUserSelect');
+            selectBox.innerHTML = '<option value="">-- एक्टिव खिलाड़ी चुनें --</option>';
+
+            snap.forEach(c => {
+                const p = c.val();
+                activePoolPlayers.push(p);
+                selectBox.innerHTML += `<option value="${p.phone}">${p.name} (${p.phone})</option>`;
+            });
+
+            document.getElementById('poolCountText').innerText = activePoolPlayers.length;
+        });
+    }
+
+    function setManualWinner(rank) {
+        const phone = document.getElementById('manualUserSelect').value;
+        if(!phone) return alert("कृपया खिलाड़ी को सेलेक्ट करें!");
+        
+        const prize = (rank === 1) ? 500 : 250;
+        if(confirm(`क्या आप ${phone} को Rank ${rank} विनर (₹${prize}) बनाना चाहते हैं?`)) {
+            creditUserBalance(phone, prize);
+            db.ref('active_pool/' + phone).remove();
+            alert(`सफलतापूर्वक ₹${prize} क्रेडिट कर दिए गए!`);
+        }
+    }
+
+    function autoDrawWinners() {
+        if(activePoolPlayers.length === 0) return alert("पूल में कोई खिलाड़ी नहीं है!");
+        if(!confirm(`क्या आप रैंडम विजेताओं को पुरस्कार बाँटना चाहते हैं?`)) return;
+
+        let players = [...activePoolPlayers].sort(() => Math.random() - 0.5);
+
+        if(players[0]) creditUserBalance(players[0].phone, 500);
+        if(players[1]) creditUserBalance(players[1].phone, 250);
+        
+        for(let i = 2; i < Math.min(10, players.length); i++) {
+            creditUserBalance(players[i].phone, 100);
+        }
+
+        db.ref('active_pool').remove();
+        alert("सभी विजेताओं को ऑटोमैटिक बैलेंस ट्रांसफर कर दिया गया है!");
+    }
+
+    function listenUsers() {
+        db.ref('users').on('value', snap => {
+            allUsersData = snap.val() || {};
+            renderUsersTable(allUsersData);
+        });
+    }
+
+    function renderUsersTable(users) {
+        const tbody = document.getElementById('userTableBody');
+        tbody.innerHTML = '';
+        const keys = Object.keys(users);
+        if(keys.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-sub);">कोई मेंबर रजिस्टर नहीं है।</td></tr>`;
+            return;
+        }
+
+        keys.forEach(phone => {
+            const u = users[phone];
+            const isBlocked = u.i
