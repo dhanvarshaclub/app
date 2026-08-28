@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>👑 Dhan Varsha Club</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#070a12">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <style>
+        :root {
+            --bg-base: #070a12;
+            --surface: rgba(18, 26, 44, 0.9);
+            --gold: #ffc837;
+            --gold-bright: #ffdf79;
+            --green: #00ff87;
+            --cyan: #00f2fe;
+            --text-light: #f8fafc;
+            --text-sub: #94a3b8;
+            --border: rgba(255, 215, 0, 0.18);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background-color: var(--bg-base);
+            background-image: radial-gradient(at 50% 0%, rgba(255, 200, 55, 0.08) 0px, transparent 60%);
+            color: var(--text-light); 
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 440px;
+            padding: 14px 14px 85px;
+            position: relative;
+        }
+
+        /* Top Bar */
+        .top-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+        }
+        .user-greeting { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
+        .top-balance { display: flex; align-items: center; gap: 6px; background: rgba(0, 255, 135, 0.15); color: var(--green); padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: 800; border: 1px solid rgba(0, 255, 135, 0.3); cursor: pointer; }
+
+        /* Tabs */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* UI Cards */
+        .ui-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+        .card-header { font-size: 14px; font-weight: 800; color: var(--gold); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+
+        /* 3D Dial */
+        .arena-wrapper {
+            position: relative;
+            width: 240px; height: 240px;
+            margin: 15px auto 20px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .bezel-ring {
+            position: absolute; width: 100%; height: 100%; border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0%, rgba(255, 200, 55, 0.35) 50%, transparent 100%);
+            animation: spinRing 6s linear infinite;
+        }
+        @keyframes spinRing { 100% { transform: rotate(360deg); } }
+        .dial-surface {
+            width: 210px; height: 210px;
+            background: radial-gradient(circle at 35% 35%, #18233c 0%, #080c16 85%);
+            border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; border: 2px solid rgba(255, 215, 0, 0.2);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 15px 35px rgba(0,0,0,0.6);
+            z-index: 2; cursor: pointer;
+        }
+
+        /* Live Winner Feed */
+        .winner-ticker {
+            max-height: 140px;
+            overflow: hidden;
+            position: relative;
+        }
+        .winner-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 440px; background: rgba(10, 14, 24, 0.96);
+            border-top: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px);
+            display: flex; justify-content: space-around; padding: 10px 0 8px; z-index: 99;
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-sub); font-size: 10px; font-weight: 700; cursor: pointer; gap: 4px; }
+        .nav-item.active { color: var(--gold); }
+        
+        .btn-full { width: 100%; padding: 12px; border: none; border-radius: 10px; background: linear-gradient(135deg, var(--green), #059669); color: #000; font-weight: 800; font-size: 13px; cursor: pointer; margin-top: 6px; }
+        .input-box { width: 100%; padding: 11px 12px; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 8px; color: #fff; font-size: 13px; margin-bottom: 10px; }
+
+        /* Auth Switch Tabs */
+        .auth-tab-switch { display: flex; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 3px; margin-bottom: 15px; }
+        .auth-tab-btn { flex: 1; padding: 8px; border: none; background: transparent; color: var(--text-sub); font-weight: 700; font-size: 12px; border-radius: 6px; cursor: pointer; }
+        .auth-tab-btn.active { background: var(--gold); color: #000; }
+
+        /* Profile Styles */
+        .profile-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), #ff8c00); display: flex; align-items: center; justify-content: center; font-size: 28px; color: #000; margin: 0 auto 10px; border: 2px solid #fff; }
+        .profile-info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px; }
+        .profile-info-row:last-child { border-bottom: none; }
+
+        /* Modal */
+        .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 100; display: none; align-items: flex-end; justify-content: center; }
+        .modal-body { width: 100%; max-width: 440px; background: #0e1526; border-radius: 24px 24px 0 0; padding: 20px; border-top: 1px solid rgba(255,255,255,0.15); max-height: 90vh; overflow-y: auto; }
+        .upi-apps { display: flex; gap: 10px; margin: 12px 0; }
+        .upi-btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- 1. AUTH SCREEN (लॉगिन और रजिस्ट्रेशन) -->
+    <div id="authScreen" style="display:none; text-align:center; padding-top:20px;">
+        <i class="fas fa-crown" style="font-size:36px; color:var(--gold); margin-bottom:8px;"></i>
+        <h2 style="font-family:'Cabinet Grotesk'; font-size:24px; margin-bottom:2px;">DHAN VARSHA CLUB</h2>
+        <p style="font-size:11px; color:var(--text-sub); margin-bottom:18px;">प्रीमियम मेंबरशिप पोर्टल</p>
+
+        <div class="ui-card" style="text-align:left;">
+            <div class="auth-tab-switch">
+                <button class="auth-tab-btn active" id="btnTabLogin" onclick="toggleAuthMode('login')">लॉगिन (Login)</button>
+                <button class="auth-tab-btn" id="btnTabRegister" onclick="toggleAuthMode('register')">नया खाता (Register)</button>
+            </div>
+
+            <!-- लॉगिन बॉक्स -->
+            <div id="loginFormSection">
+                <input type="tel" id="loginPhone" class="input-box" placeholder="10-अंकों का मोबाइल नंबर" maxlength="10">
+                <input type="password" id="loginPin" class="input-box" placeholder="4-डिजिट गुप्त पासवर्ड/पिन" maxlength="4">
+                <button class="btn-full" onclick="handleLogin()">लॉगिन करें ➔</button>
+            </div>
+
+            <!-- रजिस्ट्रेशन बॉक्स -->
+            <div id="registerFormSection" style="display:none;">
+                <input type="text" id="regName" class="input-box" placeholder="आपका पूरा नाम">
+                <input type="tel" id="regPhone" class="input-box" placeholder="10-अंकों का मोबाइल नंबर" maxlength="10">
+                <input type="password" id="regPin" class="input-box" placeholder="4-डिजिट नया पासवर्ड/पिन" maxlength="4">
+                <input type="tel" id="regRef" class="input-box" placeholder="रेफरल कोड (दोस्त का मोबाइल नंबर)">
+                <button class="btn-full" onclick="handleRegister()">खाता रजिस्टर करें ➔</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. MAIN APP DASHBOARD -->
+    <div id="mainDashboard">
+        <!-- Top Bar -->
+        <div class="top-navbar">
+            <div class="user-greeting" onclick="switchTab('profile')">
+                <i class="fas fa-user-circle" style="font-size:22px; color:var(--gold);"></i>
+                <span id="userDisplayName">लोड हो रहा है...</span>
+            </div>
+            <div class="top-balance" onclick="switchTab('wallet')">
+                <i class="fas fa-wallet"></i> ₹<span id="userBalanceDisplay">0.00</span>
+            </div>
+        </div>
+
+        <!-- TAB: HOME -->
+        <div id="tab-home" class="tab-content active">
+            <div class="arena-wrapper">
+                <div class="bezel-ring"></div>
+                <div class="dial-surface" onclick="openPaymentModal()">
+                    <span style="font-size:9px; color:var(--gold); font-weight:800; letter-spacing:2px;">LIVE CONTEST</span>
+                    <div style="font-family:'Cabinet Grotesk'; font-size:22px; font-weight:900; color:#fff; margin:4px 0 8px;">DHAN JACKPOT</div>
+                    <button style="background:linear-gradient(135deg, var(--green), #00c853); color:#000; padding:7px 20px; border-radius:30px; font-weight:800; font-size:13px; border:none; pointer-events:none;">₹50 ENTRY</button>
+                    <div style="font-size:11px; font-weight:700; color:var(--cyan); margin-top:8px;" id="liveSlotText">0 / 50 स्लॉट</div>
+                </div>
+            </div>
+
+            <div class="ui-card">
+                <div class="card-header">
+                    <span>👑 प्राइज़ पूल विवरण</span>
+                    <span style="font-size:11px; color:var(--green);">10 Winners</span>
+                </div>
+                <div style="font-size:12px; color:var(--text-sub); line-height:1.6;">
+                    🥇 <strong>1st Prize:</strong> ₹500 (10x Return)<br>
+                    🥈 <strong>2nd Prize:</strong> ₹250 (5x Return)<br>
+                    🥉 <strong>3rd to 10th:</strong> ₹100 प्रत्येक (8 विजेता)
+                </div>
+            </div>
+
+            <!-- 24/7 Live Fake/Simulated Winners Ticker -->
+            <div class="ui-card">
+                <div class="card-header">
+                    <span>🏆 लाइव विजेता (Live Payouts)</span>
+                    <span style="color:var(--green); font-size:11px; font-weight:800;">● 24x7 LIVE</span>
+                </div>
+                <div class="winner-ticker" id="winnerTickerList">
+                    <!-- Dynamic Winner Items will appear here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: TEAM -->
+        <div id="tab-team" class="tab-content">
+            <div class="ui-card" style="text-align:center; padding:20px;">
+                <i class="fas fa-users" style="font-size:28px; color:var(--gold); margin-bottom:6px;"></i>
+                <h3 style="font-size:16px;">रेफर करें और कमाएं</h3>
+                <p style="font-size:11px; color:var(--text-sub);">दोस्त के ₹50 पूल जॉइन करते ही आपको मिलेंगे <strong>₹5.00</strong></p>
+                <div style="background:rgba(0,242,254,0.1); border:1px dashed var(--cyan); color:var(--cyan); font-size:18px; font-weight:900; letter-spacing:2px; padding:6px 14px; border-radius:10px; display:inline-block; margin:10px 0;" id="myReferralDisplay">------</div>
+                <button class="btn-full" style="background:#25d366; color:#fff;" onclick="shareWhatsApp()">
+                    <i class="fab fa-whatsapp"></i> WhatsApp पर इनवाइट भेजें
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB: WALLET -->
+        <div id="tab-wallet" class="tab-content">
+            <div class="ui-card" style="text-align:center; background:linear-gradient(135deg,#18233c,#0c1220);">
+                <span style="font-size:11px; color:var(--text-sub);">उपलब्ध बैलेंस (Total Balance)</span>
+                <div style="font-family:'Cabinet Grotesk'; font-size:36px; font-weight:900; color:var(--green); margin:6px 0;">₹<span id="walletBalanceVal">0.00</span></div>
+                <small style="font-size:10px; color:var(--gold-bright);">विनिंग + रेफरल बैलेंस</small>
+            </div>
+
+            <div class="ui-card">
+                <div class="card-header"><span>💸 तुरंत UPI विड्रॉल</span><small>Min: ₹50</small></div>
+                <input type="number" class="input-box" id="inpWithdrawAmt" placeholder="राशि (उदा. ₹50)">
+                <input type="text" class="input-box" id="inpWithdrawUpi" placeholder="UPI ID (उदा. 9876543210@paytm)">
+                <button class="btn-full" onclick="submitWithdraw()">विड्रॉल रिक्वेस्ट भेजें ➔</button>
+            </div>
+        </div>
+
+        <!-- TAB: PROFILE -->
+        <div id="tab-profile" class="tab-content">
+            <div class="ui-card" style="text-align:center;">
+                <div class="profile-avatar"><i class="fas fa-user"></i></div>
+                <h3 id="profNameDisplay" style="font-size:18px; margin-bottom:2px;">---</h3>
+                <span style="font-size:11px; color:var(--gold); font-weight:700;">VERIFIED MEMBER</span>
+            </div>
+
+            <div class="ui-card">
+                <div class="card-header"><span>📋 मेरी प्रोफाइल जानकारी</span></div>
+                <div class="profile-info-row">
+                    <span style="color:var(--text-sub);">पूरा नाम</span>
+                    <strong id="profInfoName">---</strong>
+                </div>
+                <div class="profile-info-row">
+                    <span style="color:var(--text-sub);">मोबाइल नंबर</span>
+                    <strong id="profInfoPhone">---</strong>
+                </div>
+                <div class="profile-info-row">
+                    <span style="color:var(--text-sub);">मेरा रेफरल कोड</span>
+                    <strong style="color:var(--cyan);" id="profInfoRef">---</strong>
+                </div>
+            </div>
+
+            <button class="btn-full" style="background:rgba(255,71,87,0.15); color:#ff4757; border:1px solid rgba(255,71,87,0.3);" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i> अकाउंट लॉगआउट करें
+            </button>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="switchTab('home', this)"><i class="fas fa-house"></i><span>Home</span></div>
+            <div class="nav-item" onclick="switchTab('team', this)"><i class="fas fa-users"></i><span>My Team</span></div>
+            <div class="nav-item" onclick="switchTab('wallet', this)"><i class="fas fa-wallet"></i><span>Wallet</span></div>
+            <div class="nav-item" onclick="switchTab('profile', this)"><i class="fas fa-user"></i><span>Profile</span></div>
+        </div>
+    </div>
+
+    <!-- Modal: ₹50 Entry Payment -->
+    <div class="modal-bg" id="paymentModal">
+        <div class="modal-body">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h3 style="font-size:16px;">एंट्री फीस: ₹50</h3>
+                <span onclick="closePaymentModal()" style="font-size:22px; color:var(--text-sub); cursor:pointer;">&times;</span>
+            </div>
+
+            <!-- UPI Apps Buttons -->
+            <div class="upi-apps">
+                <a id="gpayLink" class="upi-btn"><i class="fab fa-google-pay"></i> GPay</a>
+                <a id="phonepeLink" class="upi-btn"><i class="fas fa-mobile-screen"></i> PhonePe</a>
+                <a id="paytmLink" class="upi-btn"><i class="fas fa-wallet"></i> Paytm</a>
+            </div>
+
+            <!-- BharatPe QR -->
+            <div style="background:#fff; padding:6px; border-radius:10px; width:140px; height:140px; margin:10px auto; display:flex;">
+                <img id="qrImg" src="" alt="BharatPe QR" style="width:100%;">
+            </div>
+            <p style="font-size:10px; color:var(--text-sub); text-align:center; margin-bottom:12px;">स्कैन करें या ऊपर दिए ऐप बटन पर क्लिक करें</p>
+
+            <input type="number" id="inpUtrNumber" class="input-box" placeholder="12-अंकों का बैंक UTR / Ref No.">
+            <button class="btn-full" onclick="submitPoolEntry()">एंट्री लॉक करें ✓</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyCvd7txLRNzf6U75N6WBMCX-iHmQ0u30eM",
+        authDomain: "dhan-varsha-club.firebaseapp.com",
+        databaseURL: "https://dhan-varsha-club-default-rtdb.firebaseio.com",
+        projectId: "dhan-varsha-club",
+        storageBucket: "dhan-varsha-club.firebasestorage.app",
+        messagingSenderId: "321838766271",
+        appId: "1:321838766271:web:357aec639b771d3cf9ce0a"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const MERCHANT_UPI = "BHARATPE2Z0I0Q6H3P14940@unitype"; 
+    const MERCHANT_NAME = "ANKUR";
+
+    let currentUser = null;
+
+    window.addEventListener('load', () => {
+        // URL Parameter se Referral Code Auto-Fill
+        const urlParams = new URLSearchParams(window.location.search);
+        const refParam = urlParams.get('ref');
+        if(refParam) {
+            document.getElementById('regRef').value = refParam;
+            toggleAuthMode('register');
+        }
+
+        const savedPhone = localStorage.getItem('dvc_user_phone');
+        if(savedPhone) {
+            db.ref('users/' + savedPhone).once('value', snap => {
+                if(snap.exists()) {
+                    currentUser = snap.val();
+                    setupDashboard();
+                } else {
+                    showAuth();
+                }
+            });
+        } else {
+            showAuth();
+        }
+        setupPaymentLinks();
+        listenToPool();
+        startWinnerTicker();
+    });
+
+    function showAuth() {
+        document.getElementById('authScreen').style.display = 'block';
+        document.getElementById('mainDashboard').style.display = 'none';
+    }
+
+    function toggleAuthMode(mode) {
+        if(mode === 'login') {
+            document.getElementById('btnTabLogin').classList.add('active');
+            document.getElementById('btnTabRegister').classList.remove('active');
+            document.getElementById('loginFormSection').style.display = 'block';
+            document.getElementById('registerFormSection').style.display = 'none';
+        } else {
+            document.getElementById('btnTabRegister').classList.add('active');
+            document.getElementById('btnTabLogin').classList.remove('active');
+            document.getElementById('registerFormSection').style.display = 'block';
+            document.getElementById('loginFormSection').style.display = 'none';
+        }
+    }
+
+    function handleLogin() {
+        const phone = document.getElementById('loginPhone').value.trim();
+        const pin = document.getElementById('loginPin').value.trim();
+
+        if(phone.length !== 10 || pin.length !== 4) return alert("कृपया सही 10-अंकों का नंबर और 4-डिजिट पिन डालें!");
+
+        db.ref('users/' + phone).once('value', snap => {
+            if(snap.exists()) {
+                const data = snap.val();
+                if(data.pin === pin) {
+                    localStorage.setItem('dvc_user_phone', phone);
+                    currentUser = data;
+                    setupDashboard();
+                } else {
+                    alert("गलत पासवर्ड/पिन! कृपया सही पिन डालें।");
+                }
+            } else {
+                alert("यह मोबाइल नंबर रजिस्टर नहीं है! पहले 'नया खाता' बनाएं।");
+            }
+        });
+    }
+
+    function handleRegister() {
+        const name = document.getElementById('regName').value.trim();
+        const phone = document.getElementById('regPhone').value.trim();
+        const pin = document.getElementById('regPin').value.trim();
+        const ref = document.getElementById('regRef').value.trim();
+
+        if(!name || phone.length !== 10 || pin.length !== 4) return alert("कृपया सभी जानकारी सही से भरें!");
+
+        const userRef = db.ref('users/' + phone);
+        userRef.once('value', snap => {
+            if(snap.exists()) {
+                alert("यह नंबर पहले से रजिस्टर्ड है! कृपया सीधे लॉगिन करें।");
+                toggleAuthMode('login');
+            } else {
+                const newUser = {
+                    name: name,
+                    phone: phone,
+                    pin: pin,
+                    referredBy: ref || null,
+                    balance: 0,
+                    joinedAt: Date.now()
+                };
+                userRef.set(newUser).then(() => {
+                    localStorage.setItem('dvc_user_phone', phone);
+                    currentUser = newUser;
+                    setupDashboard();
+                });
+            }
+        });
+    }
+
+    function handleLogout() {
+        if(confirm("क्या आप सच में लॉगआउट करना चाहते हैं?")) {
+            localStorage.removeItem('dvc_user_phone');
+            location.reload();
+        }
+    }
+
+    function setupDashboard() {
+        document.getElementById('authScreen').style.display = 'none';
+        document.getElementById('mainDashboard').style.display = 'block';
+        document.getElementById('userDisplayName').innerText = currentUser.name;
+        document.getElementById('myReferralDisplay').innerText = currentUser.phone;
+
+        document.getElementById('profNameDisplay').innerText = currentUser.name;
+        document.getElementById('profInfoName').innerText = currentUser.name;
+        document.getElementById('profInfoPhone').innerText = currentUser.phone;
+        document.getElementById('profInfoRef').innerText = currentUser.phone;
+
+        db.ref('users/' + currentUser.phone + '/balance').on('value', snap => {
+            const bal = snap.val() || 0;
+            document.getElementById('userBalanceDisplay').innerText = bal.toFixed(2);
+            document.getElementById('walletBalanceVal').innerText = bal.toFixed(2);
+        });
+    }
+
+    function switchTab(tabId, el) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('tab-' + tabId).classList.add('active');
+        if(el) {
+            el.classList.add('active');
+        } else {
+            const navs = document.querySelectorAll('.nav-item');
+            if(tabId === 'home') navs[0].classList.add('active');
+            if(tabId === 'team') navs[1].classList.add('active');
+            if(tabId === 'wallet') navs[2].classList.add('active');
+            if(tabId === 'profile') navs[3].classList.add('active');
+        }
+    }
+
+    function setupPaymentLinks() {
+        const upiUri = `upi://pay?pa=${MERCHANT_UPI}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=50&cu=INR&tn=DhanJackpot`;
+        document.getElementById('gpayLink').href = upiUri;
+        document.getElementById('phonepeLink').href = upiUri;
+        document.getElementById('paytmLink').href = upiUri;
+        document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUri)}`;
+    }
+
+    function openPaymentModal() { document.getElementById('paymentModal').style.display = 'flex'; }
+    function closePaymentModal() { document.getElementById('paymentModal').style.display = 'none'; }
+
+    function submitPoolEntry() {
+        const utr = document.getElementById('inpUtrNumber').value.trim();
+        if(utr.length < 10) return alert("कृपया सही 12-अंकों का UTR नंबर भरें!");
+
+        db.ref('pool_requests/' + utr).set({
+            utr: utr,
+            phone: currentUser.phone,
+            name: currentUser.name,
+            referredBy: currentUser.referredBy || null,
+            status: 'pending',
+            timestamp: Date.now()
+        }).then(() => {
+            alert("आपकी ₹50 एंट्री रिक्वेस्ट दर्ज हो चुकी है! एडमिन द्वारा अप्रूव होते ही स्लॉट लॉक हो जाएगा।");
+            closePaymentModal();
+            document.getElementById('inpUtrNumber').value = '';
+        });
+    }
+
+    function listenToPool() {
+        db.ref('active_pool').on('value', snap => {
+            const count = snap.numChildren();
+            document.getElementById('liveSlotText').innerHTML = `<i class="fas fa-bolt" style="color:var(--gold);"></i> ${count} / 50 स्लॉट`;
+        });
+    }
+
+    function submitWithdraw() {
+        const amt = parseFloat(document.getElementById('inpWithdrawAmt').value);
+        const upi = document.getElementById('inpWithdrawUpi').value.trim();
+
+        if(!amt || amt < 50) return alert("न्यूनतम विड्रॉल राशि ₹50 है!");
+        if(!upi) return alert("कृपया अपनी UPI ID दर्ज करें!");
+
+        db.ref('users/' + currentUser.phone + '/balance').once('value', snap => {
+            const currentBal = snap.val() || 0;
+            if(amt > currentBal) return alert("वॉलेट में पर्याप्त बैलेंस नहीं है!");
+
+            db.ref('users/' + currentUser.phone + '/balance').set(currentBal - amt);
+            db.ref('withdrawals').push({
+                phone: currentUser.phone,
+                name: currentUser.name,
+                amount: amt,
+                upi: upi,
+                status: 'pending',
+                timestamp: Date.now()
+            }).then(() => {
+                alert("विड्रॉल रिक्वेस्ट सबमिट हो गई है! जल्द ही आपके UPI पर ट्रांसफर कर दिया जाएगा।");
+                document.getElementById('inpWithdrawAmt').value = '';
+            });
+        });
+    }
+
+    function shareWhatsApp() {
+        const currentUrl = window.location.origin + window.location.pathname;
+        const refLink = `${currentUrl}?ref=${currentUser.phone}`;
+        
+        const message = 
+`👑 *DHAN VARSHA CLUB* 👑
+━━━━━━━━━━━━━━━━━━━━━
+🔥 *अब नहीं रहेगा कोई गरीब, सबको मिलेगा अमीर बनने का मौका!* 🔥
+━━━━━━━━━━━━━━━━━━━━━
+
+💥 *मात्र ₹50 में जीतें बड़ा इनाम!* 💥
+
+📊 *प्राइज़ पूल चार्ट (हर राउंड में 10 विजेता):*
+🥇 *1st Rank :* ₹500 (सीधा 10 गुना)
+🥈 *2nd Rank :* ₹250 (5 गुना रिटर्न)
+🥉 *3rd - 10th :* ₹100 प्रत्येक (8 विजेता)
+
+⚡ *100% सेफ & रियल-टाइम UPI विड्रॉल*
+⚡ *हर रेफरल पर तुरंत पाएँ ₹5.00 कैश*
+
+👇 *अभी नीचे दिए लिंक पर क्लिक करके जॉइन करें:*
+👉 ${refLink}
+
+━━━━━━━━━━━━━━━━━━━━━
+🚀 *कम पैसे में बड़ा कमाने का सबसे भरोसेमंद मौका!*`;
+
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, '_blank');
+    }
+
+    // 24/7 Continuous Simulated Winner Ticker
+    const fakeNames = ["Rahul S.", "Amit K.", "Vikash V.", "Deepak P.", "Suresh M.", "Rohit J.", "Pooja R.", "Manoj T.", "Anil K.", "Sunil D.", "Karan S.", "Pankaj Y."];
+    const fakePrizes = ["₹500 (1st Prize)", "₹250 (2nd Prize)", "₹100 (Prize Pool)", "₹100 (Prize Pool)", "₹5.00 (Referral)"];
+
+    function startWinnerTicker() {
+        const container = document.getElementById('winnerTickerList');
+        
+        for(let i=0; i<3; i++) {
+            addRandomWinner(container);
+        }
+
+        setInterval(() => {
+            addRandomWinner(container);
+        }, 4500);
+    }
+
+    function addRandomWinner(container) {
+        const randName = fakeNames[Math.floor(Math.random() * fakeNames.length)];
+        const randPrize = fakePrizes[Math.floor(Math.random() * fakePrizes.length)];
+        const maskNum = "98" + Math.floor(1000 + Math.random() * 9000) + "XX";
+        
+        const item = document.createElement('div');
+        item.className = 'winner-item';
+        item.innerHTML = `
+            <span><i class="fas fa-trophy" style="color:var(--gold); margin-right:5px;"></i> <strong>${randName}</strong> (${maskNum})</span>
+            <strong style="color:var(--green);">${randPrize}</strong>
+        `;
+
+        container.prepend(item);
+        if(container.children.length > 5) {
+            container.removeChild(container.lastChild);
+        }
+    }
+</script>
+
+</body>
+</html>
