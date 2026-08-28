@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>👑 Dhan Varsha Club</title>
+    <title>👑 Dhan Varsha Club - India's #1 Winning Arena</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#070a12">
     
-    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Firebase SDK -->
@@ -20,21 +20,25 @@
     <style>
         :root {
             --bg-base: #070a12;
-            --surface: rgba(18, 26, 44, 0.9);
+            --surface: rgba(18, 26, 44, 0.92);
+            --surface-card: #101728;
             --gold: #ffc837;
-            --gold-bright: #ffdf79;
+            --gold-glow: rgba(255, 200, 55, 0.35);
             --green: #00ff87;
             --cyan: #00f2fe;
             --text-light: #f8fafc;
             --text-sub: #94a3b8;
-            --border: rgba(255, 215, 0, 0.18);
+            --border: rgba(255, 215, 0, 0.22);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body { 
             background-color: var(--bg-base);
-            background-image: radial-gradient(at 50% 0%, rgba(255, 200, 55, 0.08) 0px, transparent 60%);
+            background-image: 
+                radial-gradient(at 50% 0%, rgba(255, 200, 55, 0.12) 0px, transparent 65%),
+                radial-gradient(at 0% 100%, rgba(0, 242, 254, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 255, 135, 0.08) 0px, transparent 50%);
             color: var(--text-light); 
             min-height: 100vh;
             display: flex;
@@ -43,12 +47,168 @@
 
         .app-container {
             width: 100%;
-            max-width: 440px;
-            padding: 14px 14px 85px;
+            max-width: 460px;
+            padding: 12px 14px 85px;
             position: relative;
         }
 
-        /* Top Bar */
+        /* 1-Click Install App Banner */
+        .install-pwa-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, rgba(255, 200, 55, 0.15), rgba(0, 242, 254, 0.15));
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            backdrop-filter: blur(10px);
+        }
+        .btn-install {
+            background: linear-gradient(135deg, var(--gold), #ff9900);
+            color: #000;
+            font-weight: 800;
+            font-size: 11px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--gold-glow);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Landing Brand Hero */
+        .brand-hero {
+            text-align: center;
+            padding: 10px 0 16px;
+        }
+        .logo-wrap {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 8px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #1f2a44, #0d1424);
+            border: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px var(--gold-glow);
+            position: relative;
+        }
+        .logo-wrap i {
+            font-size: 34px;
+            color: var(--gold);
+            filter: drop-shadow(0 2px 8px var(--gold-glow));
+        }
+        .brand-title {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #fff 40%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2px;
+        }
+        .brand-subtitle {
+            font-size: 11px;
+            color: var(--cyan);
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* Live Promo Payouts Ribbon */
+        .live-promo-ribbon {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 30px;
+            padding: 6px 14px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        /* UI Cards */
+        .ui-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            backdrop-filter: blur(12px);
+        }
+        .card-header { font-size: 14px; font-weight: 800; color: var(--gold); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+
+        /* Auth Switch Tabs */
+        .auth-tab-switch { display: flex; background: rgba(0,0,0,0.45); border-radius: 12px; padding: 4px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.06); }
+        .auth-tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-sub); font-weight: 800; font-size: 12px; border-radius: 9px; cursor: pointer; transition: 0.2s; }
+        .auth-tab-btn.active { background: linear-gradient(135deg, var(--gold), #ffaa00); color: #000; box-shadow: 0 4px 12px var(--gold-glow); }
+
+        .input-box { 
+            width: 100%; 
+            padding: 13px 14px; 
+            background: rgba(0,0,0,0.55); 
+            border: 1px solid rgba(255, 215, 0, 0.25); 
+            border-radius: 12px; 
+            color: #fff; 
+            font-size: 14px; 
+            margin-bottom: 12px; 
+            outline: none;
+            transition: 0.2s;
+        }
+        .input-box:focus { border-color: var(--gold); box-shadow: 0 0 12px var(--gold-glow); }
+
+        .btn-full { 
+            width: 100%; 
+            padding: 14px; 
+            border: none; 
+            border-radius: 12px; 
+            background: linear-gradient(135deg, var(--green), #059669); 
+            color: #000; 
+            font-weight: 900; 
+            font-size: 14px; 
+            cursor: pointer; 
+            box-shadow: 0 6px 20px rgba(0, 255, 135, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Feature Badges Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 14px 0;
+        }
+        .feature-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+        }
+        .feature-item i { font-size: 18px; color: var(--gold); margin-bottom: 4px; display: block; }
+        .feature-item strong { font-size: 11px; display: block; }
+        .feature-item small { font-size: 9px; color: var(--text-sub); }
+
+        /* Official Footer */
+        .official-footer {
+            text-align: center;
+            padding: 15px 0;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            margin-top: 10px;
+        }
+        .official-footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
+
+        /* Top Bar (Dashboard) */
         .top-navbar {
             display: flex;
             justify-content: space-between;
@@ -62,22 +222,7 @@
         .user-greeting { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
         .top-balance { display: flex; align-items: center; gap: 6px; background: rgba(0, 255, 135, 0.15); color: var(--green); padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: 800; border: 1px solid rgba(0, 255, 135, 0.3); cursor: pointer; }
 
-        /* Tabs */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* UI Cards */
-        .ui-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 16px;
-            margin-bottom: 14px;
-        }
-        .card-header { font-size: 14px; font-weight: 800; color: var(--gold); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-
-        /* 3D Dial */
+        /* Dial & Arena */
         .arena-wrapper {
             position: relative;
             width: 240px; height: 240px;
@@ -99,54 +244,36 @@
             z-index: 2; cursor: pointer;
         }
 
-        /* Live Winner Feed */
-        .winner-ticker {
-            max-height: 140px;
-            overflow: hidden;
-            position: relative;
-        }
+        /* Tabs */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Winner Ticker */
+        .winner-ticker { max-height: 140px; overflow: hidden; position: relative; }
         .winner-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 10px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 8px;
-            margin-bottom: 6px;
-            font-size: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 10px; background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px; margin-bottom: 6px; font-size: 12px;
             animation: slideIn 0.5s ease-out;
         }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Bottom Nav */
         .bottom-nav {
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 100%; max-width: 440px; background: rgba(10, 14, 24, 0.96);
+            width: 100%; max-width: 460px; background: rgba(10, 14, 24, 0.96);
             border-top: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px);
             display: flex; justify-content: space-around; padding: 10px 0 8px; z-index: 99;
         }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-sub); font-size: 10px; font-weight: 700; cursor: pointer; gap: 4px; }
         .nav-item.active { color: var(--gold); }
-        
-        .btn-full { width: 100%; padding: 12px; border: none; border-radius: 10px; background: linear-gradient(135deg, var(--green), #059669); color: #000; font-weight: 800; font-size: 13px; cursor: pointer; margin-top: 6px; }
-        .input-box { width: 100%; padding: 11px 12px; background: rgba(0,0,0,0.4); border: 1px solid var(--border); border-radius: 8px; color: #fff; font-size: 13px; margin-bottom: 10px; }
 
-        /* Auth Switch Tabs */
-        .auth-tab-switch { display: flex; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 3px; margin-bottom: 15px; }
-        .auth-tab-btn { flex: 1; padding: 8px; border: none; background: transparent; color: var(--text-sub); font-weight: 700; font-size: 12px; border-radius: 6px; cursor: pointer; }
-        .auth-tab-btn.active { background: var(--gold); color: #000; }
-
-        /* Profile Styles */
         .profile-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), #ff8c00); display: flex; align-items: center; justify-content: center; font-size: 28px; color: #000; margin: 0 auto 10px; border: 2px solid #fff; }
         .profile-info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px; }
-        .profile-info-row:last-child { border-bottom: none; }
-
-        /* Modal */
+        
         .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 100; display: none; align-items: flex-end; justify-content: center; }
-        .modal-body { width: 100%; max-width: 440px; background: #0e1526; border-radius: 24px 24px 0 0; padding: 20px; border-top: 1px solid rgba(255,255,255,0.15); max-height: 90vh; overflow-y: auto; }
+        .modal-body { width: 100%; max-width: 460px; background: #0e1526; border-radius: 24px 24px 0 0; padding: 20px; border-top: 1px solid rgba(255,255,255,0.15); max-height: 90vh; overflow-y: auto; }
         .upi-apps { display: flex; gap: 10px; margin: 12px 0; }
         .upi-btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; }
     </style>
@@ -155,38 +282,95 @@
 
 <div class="app-container">
 
-    <!-- 1. AUTH SCREEN (लॉगिन और रजिस्ट्रेशन) -->
-    <div id="authScreen" style="display:none; text-align:center; padding-top:20px;">
-        <i class="fas fa-crown" style="font-size:36px; color:var(--gold); margin-bottom:8px;"></i>
-        <h2 style="font-family:'Cabinet Grotesk'; font-size:24px; margin-bottom:2px;">DHAN VARSHA CLUB</h2>
-        <p style="font-size:11px; color:var(--text-sub); margin-bottom:18px;">प्रीमियम मेंबरशिप पोर्टल</p>
+    <!-- 1. AUTH SCREEN (अल्ट्रा-प्रीमियम लैंडिंग & लॉगिन पेज) -->
+    <div id="authScreen" style="display:none;">
+        
+        <!-- Top App Install Prompt Bar -->
+        <div class="install-pwa-bar" id="installPromptBar">
+            <div style="display:flex; align-items:center; gap:8px;">
+                <i class="fas fa-mobile-screen-button" style="color:var(--gold); font-size:18px;"></i>
+                <div>
+                    <strong style="font-size:12px; display:block;">Dhan Varsha Official App</strong>
+                    <small style="font-size:10px; color:var(--text-sub);">फास्ट & सुरक्षित अनुभव के लिए इंस्टॉल करें</small>
+                </div>
+            </div>
+            <button class="btn-install" onclick="triggerAppInstall()"><i class="fas fa-download"></i> इंस्टॉल करें</button>
+        </div>
 
-        <div class="ui-card" style="text-align:left;">
+        <!-- Brand Hero Header -->
+        <div class="brand-hero">
+            <div class="logo-wrap">
+                <i class="fas fa-crown"></i>
+            </div>
+            <h1 class="brand-title">DHAN VARSHA CLUB</h1>
+            <p class="brand-subtitle">👑 भारत का #1 लकी जैकपॉट क्लब 👑</p>
+        </div>
+
+        <!-- Live Winners Ticker (Login से पहले) -->
+        <div class="live-promo-ribbon">
+            <span style="color:var(--gold); font-weight:800;"><i class="fas fa-bolt"></i> Live Payout:</span>
+            <span id="guestTickerText" style="color:var(--green); font-weight:700;">रोहित वर्मा ने ₹500 जीते!</span>
+        </div>
+
+        <!-- Login / Register Card -->
+        <div class="ui-card">
             <div class="auth-tab-switch">
                 <button class="auth-tab-btn active" id="btnTabLogin" onclick="toggleAuthMode('login')">लॉगिन (Login)</button>
                 <button class="auth-tab-btn" id="btnTabRegister" onclick="toggleAuthMode('register')">नया खाता (Register)</button>
             </div>
 
-            <!-- लॉगिन बॉक्स -->
+            <!-- Login Form -->
             <div id="loginFormSection">
-                <input type="tel" id="loginPhone" class="input-box" placeholder="10-अंकों का मोबाइल नंबर" maxlength="10">
-                <input type="password" id="loginPin" class="input-box" placeholder="4-डिजिट गुप्त पासवर्ड/पिन" maxlength="4">
+                <input type="tel" id="loginPhone" class="input-box" placeholder="📱 10-अंकों का मोबाइल नंबर" maxlength="10">
+                <input type="password" id="loginPin" class="input-box" placeholder="🔒 4-डिजिट गुप्त पासवर्ड/पिन" maxlength="4">
                 <button class="btn-full" onclick="handleLogin()">लॉगिन करें ➔</button>
             </div>
 
-            <!-- रजिस्ट्रेशन बॉक्स -->
+            <!-- Register Form -->
             <div id="registerFormSection" style="display:none;">
-                <input type="text" id="regName" class="input-box" placeholder="आपका पूरा नाम">
-                <input type="tel" id="regPhone" class="input-box" placeholder="10-अंकों का मोबाइल नंबर" maxlength="10">
-                <input type="password" id="regPin" class="input-box" placeholder="4-डिजिट नया पासवर्ड/पिन" maxlength="4">
-                <input type="tel" id="regRef" class="input-box" placeholder="रेफरल कोड (दोस्त का मोबाइल नंबर)">
-                <button class="btn-full" onclick="handleRegister()">खाता रजिस्टर करें ➔</button>
+                <input type="text" id="regName" class="input-box" placeholder="👤 आपका पूरा नाम">
+                <input type="tel" id="regPhone" class="input-box" placeholder="📱 10-अंकों का मोबाइल नंबर" maxlength="10">
+                <input type="password" id="regPin" class="input-box" placeholder="🔒 4-डिजिट नया पासवर्ड/पिन" maxlength="4">
+                <input type="tel" id="regRef" class="input-box" placeholder="🎁 रेफरल कोड (दोस्त का मोबाइल नंबर)">
+                <button class="btn-full" onclick="handleRegister()">नया खाता बनाएं ➔</button>
             </div>
+        </div>
+
+        <!-- Trust Features Grid -->
+        <div class="feature-grid">
+            <div class="feature-item">
+                <i class="fas fa-shield-halved"></i>
+                <strong>100% सुरक्षित सिस्टम</strong>
+                <small>ऑटोमैटिक UPI पेमेंट्स</small>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-bolt"></i>
+                <strong>तुरंत विड्रॉल</strong>
+                <small>सीधा बैंक/UPI में पैसा</small>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-sack-dollar"></i>
+                <strong>₹5 रेफरल बोनस</strong>
+                <small>हर दोस्त के जॉइन पर</small>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-headset"></i>
+                <strong>24x7 सपोर्ट</strong>
+                <small>ईमेल & चैट सहायता</small>
+            </div>
+        </div>
+
+        <!-- Official Footer -->
+        <div class="official-footer">
+            <p style="font-size:11px; color:var(--text-sub); margin-bottom:4px;">आधिकारिक सहायता ईमेल:</p>
+            <a href="mailto:support@dhanvarsha.club" style="font-size:12px;"><i class="fas fa-envelope"></i> support@dhanvarsha.club</a>
+            <p style="font-size:10px; color:rgba(255,255,255,0.3); margin-top:10px;">© 2026 Dhan Varsha Club. All Rights Reserved.</p>
         </div>
     </div>
 
-    <!-- 2. MAIN APP DASHBOARD -->
-    <div id="mainDashboard">
+    <!-- 2. MAIN APP DASHBOARD (लॉगिन के बाद) -->
+    <div id="mainDashboard" style="display:none;">
+        
         <!-- Top Bar -->
         <div class="top-navbar">
             <div class="user-greeting" onclick="switchTab('profile')">
@@ -222,15 +406,12 @@
                 </div>
             </div>
 
-            <!-- 24/7 Live Fake/Simulated Winners Ticker -->
             <div class="ui-card">
                 <div class="card-header">
                     <span>🏆 लाइव विजेता (Live Payouts)</span>
                     <span style="color:var(--green); font-size:11px; font-weight:800;">● 24x7 LIVE</span>
                 </div>
-                <div class="winner-ticker" id="winnerTickerList">
-                    <!-- Dynamic Winner Items will appear here -->
-                </div>
+                <div class="winner-ticker" id="winnerTickerList"></div>
             </div>
         </div>
 
@@ -309,14 +490,12 @@
                 <span onclick="closePaymentModal()" style="font-size:22px; color:var(--text-sub); cursor:pointer;">&times;</span>
             </div>
 
-            <!-- UPI Apps Buttons -->
             <div class="upi-apps">
                 <a id="gpayLink" class="upi-btn"><i class="fab fa-google-pay"></i> GPay</a>
                 <a id="phonepeLink" class="upi-btn"><i class="fas fa-mobile-screen"></i> PhonePe</a>
                 <a id="paytmLink" class="upi-btn"><i class="fas fa-wallet"></i> Paytm</a>
             </div>
 
-            <!-- BharatPe QR -->
             <div style="background:#fff; padding:6px; border-radius:10px; width:140px; height:140px; margin:10px auto; display:flex;">
                 <img id="qrImg" src="" alt="BharatPe QR" style="width:100%;">
             </div>
@@ -330,6 +509,34 @@
 </div>
 
 <script>
+    // PWA Service Worker Registration
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+
+    // PWA 1-Click Install System
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const pwaBar = document.getElementById('installPromptBar');
+        if(pwaBar) pwaBar.style.display = 'flex';
+    });
+
+    function triggerAppInstall() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    document.getElementById('installPromptBar').style.display = 'none';
+                }
+                deferredPrompt = null;
+            });
+        } else {
+            alert("ऐप इंस्टॉल करने के लिए अपने ब्राउज़र के ऊपर दिए 3 डॉट्स पर क्लिक करके 'Install App' या 'Add to Home Screen' चुनें।");
+        }
+    }
+
     const firebaseConfig = {
         apiKey: "AIzaSyCvd7txLRNzf6U75N6WBMCX-iHmQ0u30eM",
         authDomain: "dhan-varsha-club.firebaseapp.com",
@@ -342,13 +549,24 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    const MERCHANT_UPI = "BHARATPE2Z0I0Q6H3P14940@unitype"; 
-    const MERCHANT_NAME = "ANKUR";
-
+    let MERCHANT_UPI = "BHARATPE2Z0I0Q6H3P14940@unitype"; 
+    let MERCHANT_NAME = "ANKUR";
     let currentUser = null;
 
     window.addEventListener('load', () => {
-        // URL Parameter se Referral Code Auto-Fill
+        // Fetch Realtime UPI Settings from Admin
+        db.ref('app_settings').on('value', snap => {
+            if(snap.exists()) {
+                const s = snap.val();
+                if(s.merchantUpi) MERCHANT_UPI = s.merchantUpi;
+                if(s.merchantName) MERCHANT_NAME = s.merchantName;
+                setupPaymentLinks(s.customQr);
+            } else {
+                setupPaymentLinks();
+            }
+        });
+
+        // URL Parameter for Referral
         const urlParams = new URLSearchParams(window.location.search);
         const refParam = urlParams.get('ref');
         if(refParam) {
@@ -369,9 +587,10 @@
         } else {
             showAuth();
         }
-        setupPaymentLinks();
+
         listenToPool();
         startWinnerTicker();
+        startGuestTicker();
     });
 
     function showAuth() {
@@ -402,6 +621,7 @@
         db.ref('users/' + phone).once('value', snap => {
             if(snap.exists()) {
                 const data = snap.val();
+                if(data.isBlocked === true) return alert("आपका खाता सुरक्षा कारणों से ब्लॉक किया गया है! एडमिन से संपर्क करें।");
                 if(data.pin === pin) {
                     localStorage.setItem('dvc_user_phone', phone);
                     currentUser = data;
@@ -486,12 +706,17 @@
         }
     }
 
-    function setupPaymentLinks() {
+    function setupPaymentLinks(customQr) {
         const upiUri = `upi://pay?pa=${MERCHANT_UPI}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=50&cu=INR&tn=DhanJackpot`;
         document.getElementById('gpayLink').href = upiUri;
         document.getElementById('phonepeLink').href = upiUri;
         document.getElementById('paytmLink').href = upiUri;
-        document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUri)}`;
+        
+        if(customQr && customQr.length > 5) {
+            document.getElementById('qrImg').src = customQr;
+        } else {
+            document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUri)}`;
+        }
     }
 
     function openPaymentModal() { document.getElementById('paymentModal').style.display = 'flex'; }
@@ -577,23 +802,17 @@
         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`, '_blank');
     }
 
-    // 24/7 Continuous Simulated Winner Ticker
     const fakeNames = ["Rahul S.", "Amit K.", "Vikash V.", "Deepak P.", "Suresh M.", "Rohit J.", "Pooja R.", "Manoj T.", "Anil K.", "Sunil D.", "Karan S.", "Pankaj Y."];
     const fakePrizes = ["₹500 (1st Prize)", "₹250 (2nd Prize)", "₹100 (Prize Pool)", "₹100 (Prize Pool)", "₹5.00 (Referral)"];
 
     function startWinnerTicker() {
         const container = document.getElementById('winnerTickerList');
-        
-        for(let i=0; i<3; i++) {
-            addRandomWinner(container);
-        }
-
-        setInterval(() => {
-            addRandomWinner(container);
-        }, 4500);
+        for(let i=0; i<3; i++) { addRandomWinner(container); }
+        setInterval(() => { addRandomWinner(container); }, 4500);
     }
 
     function addRandomWinner(container) {
+        if(!container) return;
         const randName = fakeNames[Math.floor(Math.random() * fakeNames.length)];
         const randPrize = fakePrizes[Math.floor(Math.random() * fakePrizes.length)];
         const maskNum = "98" + Math.floor(1000 + Math.random() * 9000) + "XX";
@@ -609,6 +828,16 @@
         if(container.children.length > 5) {
             container.removeChild(container.lastChild);
         }
+    }
+
+    function startGuestTicker() {
+        const guestText = document.getElementById('guestTickerText');
+        if(!guestText) return;
+        setInterval(() => {
+            const randName = fakeNames[Math.floor(Math.random() * fakeNames.length)];
+            const randPrize = fakePrizes[Math.floor(Math.random() * fakePrizes.length)];
+            guestText.innerHTML = `${randName} ने <strong>${randPrize}</strong> जीते!`;
+        }, 3500);
     }
 </script>
 
