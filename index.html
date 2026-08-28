@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>👑 Dhan Varsha Club - India's #1 Winning Arena</title>
     
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#070a12">
-    
     <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -78,12 +75,12 @@
         /* Landing Brand Hero */
         .brand-hero { text-align: center; padding: 10px 0 14px; }
         .logo-wrap {
-            width: 72px; height: 72px; margin: 0 auto 8px; border-radius: 22px;
+            width: 70px; height: 70px; margin: 0 auto 8px; border-radius: 22px;
             background: linear-gradient(135deg, #1f2a44, #0d1424); border: 2px solid var(--gold);
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 10px 25px var(--gold-glow);
         }
-        .logo-wrap i { font-size: 34px; color: var(--gold); filter: drop-shadow(0 2px 8px var(--gold-glow)); }
+        .logo-wrap i { font-size: 32px; color: var(--gold); filter: drop-shadow(0 2px 8px var(--gold-glow)); }
         .brand-title {
             font-family: 'Cabinet Grotesk', sans-serif; font-size: 26px; font-weight: 900;
             letter-spacing: 0.5px;
@@ -108,7 +105,7 @@
 
         /* Auth Switch */
         .auth-tab-switch { display: flex; background: rgba(0,0,0,0.45); border-radius: 12px; padding: 4px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.06); }
-        .auth-tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-sub); font-weight: 800; font-size: 12px; border-radius: 9px; cursor: pointer; }
+        .auth-tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-sub); font-weight: 800; font-size: 12px; border-radius: 9px; cursor: pointer; transition: 0.2s; }
         .auth-tab-btn.active { background: linear-gradient(135deg, var(--gold), #ffaa00); color: #000; box-shadow: 0 4px 12px var(--gold-glow); }
 
         .input-box { 
@@ -152,8 +149,7 @@
         }
 
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-content.active { display: block; }
 
         .winner-ticker { max-height: 140px; overflow: hidden; position: relative; }
         .winner-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: rgba(255, 255, 255, 0.03); border-radius: 8px; margin-bottom: 6px; font-size: 12px; }
@@ -184,7 +180,7 @@
     <!-- 1. AUTH SCREEN (LANDING & LOGIN) -->
     <div id="authScreen">
         <!-- Install App Button -->
-        <div class="install-pwa-bar" id="installPromptBar">
+        <div class="install-pwa-bar">
             <div style="display:flex; align-items:center; gap:8px;">
                 <i class="fas fa-mobile-screen-button" style="color:var(--gold); font-size:18px;"></i>
                 <div>
@@ -192,7 +188,7 @@
                     <small style="font-size:10px; color:var(--text-sub);">फ़ोन में इनस्टॉल करने के लिए क्लिक करें</small>
                 </div>
             </div>
-            <button class="btn-install" onclick="triggerAppInstall()"><i class="fas fa-download"></i> इंस्टॉल करें</button>
+            <button type="button" class="btn-install" id="btnInstallApp"><i class="fas fa-download"></i> इंस्टॉल करें</button>
         </div>
 
         <!-- Brand Hero Header -->
@@ -202,24 +198,24 @@
             <p class="brand-subtitle">👑 भारत का #1 लकी जैकपॉट क्लब 👑</p>
         </div>
 
-        <!-- Live Winners Ticker (Login से पहले) -->
+        <!-- Live Winners Ticker -->
         <div class="live-promo-ribbon">
             <span style="color:var(--gold); font-weight:800;"><i class="fas fa-bolt"></i> Live Payout:</span>
             <span id="guestTickerText" style="color:var(--green); font-weight:700;">रोहित वर्मा ने ₹500 जीते!</span>
         </div>
 
-        <!-- Login / Register Box -->
+        <!-- Login / Register Card -->
         <div class="ui-card">
             <div class="auth-tab-switch">
-                <button class="auth-tab-btn active" id="btnTabLogin" onclick="toggleAuthMode('login')">लॉगिन (Login)</button>
-                <button class="auth-tab-btn" id="btnTabRegister" onclick="toggleAuthMode('register')">नया खाता (Register)</button>
+                <button type="button" class="auth-tab-btn active" id="btnTabLogin">लॉगिन (Login)</button>
+                <button type="button" class="auth-tab-btn" id="btnTabRegister">नया खाता (Register)</button>
             </div>
 
             <!-- Login Form -->
-            <div id="loginFormSection">
+            <div id="loginFormSection" style="display:block;">
                 <input type="tel" id="loginPhone" class="input-box" placeholder="📱 10-अंकों का मोबाइल नंबर" maxlength="10">
                 <input type="password" id="loginPin" class="input-box" placeholder="🔒 4-डिजिट गुप्त पासवर्ड/पिन" maxlength="4">
-                <button class="btn-full" onclick="handleLogin()">लॉगिन करें ➔</button>
+                <button type="button" class="btn-full" id="btnLoginSubmit">लॉगिन करें ➔</button>
             </div>
 
             <!-- Register Form -->
@@ -228,7 +224,7 @@
                 <input type="tel" id="regPhone" class="input-box" placeholder="📱 10-अंकों का मोबाइल नंबर" maxlength="10">
                 <input type="password" id="regPin" class="input-box" placeholder="🔒 4-डिजिट नया पासवर्ड/पिन" maxlength="4">
                 <input type="tel" id="regRef" class="input-box" placeholder="🎁 रेफरल कोड (दोस्त का मोबाइल नंबर)">
-                <button class="btn-full" onclick="handleRegister()">नया खाता बनाएं ➔</button>
+                <button type="button" class="btn-full" id="btnRegisterSubmit">नया खाता बनाएं ➔</button>
             </div>
         </div>
 
@@ -269,11 +265,11 @@
         
         <!-- Top Bar -->
         <div class="top-navbar">
-            <div class="user-greeting" onclick="switchTab('profile')">
+            <div class="user-greeting" id="topProfileBtn">
                 <i class="fas fa-user-circle" style="font-size:22px; color:var(--gold);"></i>
                 <span id="userDisplayName">लोड हो रहा है...</span>
             </div>
-            <div class="top-balance" onclick="switchTab('wallet')">
+            <div class="top-balance" id="topWalletBtn">
                 <i class="fas fa-wallet"></i> ₹<span id="userBalanceDisplay">0.00</span>
             </div>
         </div>
@@ -282,10 +278,10 @@
         <div id="tab-home" class="tab-content active">
             <div class="arena-wrapper">
                 <div class="bezel-ring"></div>
-                <div class="dial-surface" onclick="openPaymentModal()">
+                <div class="dial-surface" id="btnOpenPlayModal">
                     <span style="font-size:9px; color:var(--gold); font-weight:800; letter-spacing:2px;">LIVE CONTEST</span>
                     <div style="font-family:'Cabinet Grotesk'; font-size:22px; font-weight:900; color:#fff; margin:4px 0 8px;">DHAN JACKPOT</div>
-                    <button style="background:linear-gradient(135deg, var(--green), #00c853); color:#000; padding:7px 20px; border-radius:30px; font-weight:800; font-size:13px; border:none; pointer-events:none;">₹50 ENTRY</button>
+                    <button type="button" style="background:linear-gradient(135deg, var(--green), #00c853); color:#000; padding:7px 20px; border-radius:30px; font-weight:800; font-size:13px; border:none; pointer-events:none;">₹50 ENTRY</button>
                     <div style="font-size:11px; font-weight:700; color:var(--cyan); margin-top:8px;" id="liveSlotText">0 / 50 स्लॉट</div>
                 </div>
             </div>
@@ -317,7 +313,7 @@
                 <i class="fas fa-gift" style="font-size:24px; color:var(--gold); margin-bottom:6px;"></i>
                 <h3 style="font-size:15px; margin-bottom:4px;">रेफर करें और कमाएं (₹5 / Member)</h3>
                 <p style="font-size:11px; color:var(--text-sub); margin-bottom:10px;">दोस्तों को इनवाइट करें और हर ₹50 एंट्री पर पाएँ ₹5.00 तुरंत!</p>
-                <button class="btn-full btn-whatsapp" onclick="shareWhatsApp()">
+                <button type="button" class="btn-full btn-whatsapp" id="btnHomeShareWa">
                     <i class="fab fa-whatsapp" style="font-size:18px;"></i> WhatsApp पर अभी शेयर करें ➔
                 </button>
             </div>
@@ -331,7 +327,7 @@
                 <p style="font-size:11px; color:var(--text-sub);">आपका रेफरल कोड (मोबाइल नंबर):</p>
                 <div style="background:rgba(0,242,254,0.1); border:1px dashed var(--cyan); color:var(--cyan); font-size:18px; font-weight:900; letter-spacing:2px; padding:6px 14px; border-radius:10px; display:inline-block; margin:8px 0;" id="myReferralDisplay">------</div>
                 
-                <button class="btn-full btn-whatsapp" style="margin-top:6px;" onclick="shareWhatsApp()">
+                <button type="button" class="btn-full btn-whatsapp" style="margin-top:6px;" id="btnTeamShareWa">
                     <i class="fab fa-whatsapp"></i> दोस्तों को इनवाइट लिंक भेजें
                 </button>
             </div>
@@ -345,3 +341,10 @@
                 <div id="teamMembersList">
                     <p style="font-size:12px; color:var(--text-sub); text-align:center; padding:15px 0;">लोड हो रहा है...</p>
                 </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: WALLET -->
+        <div id="tab-wallet" class="tab-content">
+            <div class="ui-card" style="text-align:center; background:linear-gradient(135deg,#18233c,#0c1220);">
+                <span style="font-size:11px; color:
