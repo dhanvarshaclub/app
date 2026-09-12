@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>👑 Dhan Varsha Club - India's #1 Winning Arena</title>
+    <title>👑 Dhan Varsha Club</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <!-- Firebase Library -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
         :root {
             --bg-base: #070a12;
             --surface: rgba(18, 26, 44, 0.95);
             --gold: #ffc837;
-            --gold-glow: rgba(255, 200, 55, 0.35);
             --green: #00ff87;
             --cyan: #00f2fe;
             --text-light: #f8fafc;
@@ -26,68 +25,27 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            background-color: var(--bg-base);
-            background-image: 
-                radial-gradient(at 50% 0%, rgba(255, 200, 55, 0.12) 0px, transparent 65%),
-                radial-gradient(at 0% 100%, rgba(0, 242, 254, 0.08) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(0, 255, 135, 0.08) 0px, transparent 50%);
-            color: var(--text-light); 
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-        }
+        body { background-color: var(--bg-base); color: var(--text-light); min-height: 100vh; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 460px; padding: 12px 14px 90px; }
 
-        .app-container {
-            width: 100%;
-            max-width: 460px;
-            padding: 12px 14px 90px;
-            position: relative;
-        }
-
-        /* 1-Click Install App Banner */
         .install-pwa-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            display: flex; align-items: center; justify-content: space-between;
             background: linear-gradient(135deg, rgba(255, 200, 55, 0.15), rgba(0, 242, 254, 0.15));
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 10px 14px;
-            margin-bottom: 14px;
+            border: 1px solid var(--border); border-radius: 14px; padding: 10px 14px; margin-bottom: 14px;
         }
         .btn-install {
-            background: linear-gradient(135deg, var(--gold), #ff9900);
-            color: #000;
-            font-weight: 800;
-            font-size: 11px;
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 15px var(--gold-glow);
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            background: linear-gradient(135deg, var(--gold), #ff9900); color: #000;
+            font-weight: 800; font-size: 11px; padding: 6px 12px; border-radius: 20px; border: none; cursor: pointer;
         }
 
-        /* Landing Brand Hero */
         .brand-hero { text-align: center; padding: 10px 0 14px; }
         .logo-wrap {
             width: 70px; height: 70px; margin: 0 auto 8px; border-radius: 22px;
-            background: linear-gradient(135deg, #1f2a44, #0d1424); border: 2px solid var(--gold);
+            background: #101728; border: 2px solid var(--gold);
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 25px var(--gold-glow);
         }
-        .logo-wrap i { font-size: 32px; color: var(--gold); filter: drop-shadow(0 2px 8px var(--gold-glow)); }
-        .brand-title {
-            font-family: 'Cabinet Grotesk', sans-serif; font-size: 26px; font-weight: 900;
-            letter-spacing: 0.5px;
-            background: linear-gradient(135deg, #fff 40%, var(--gold) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 2px;
-        }
-        .brand-subtitle { font-size: 11px; color: var(--cyan); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+        .logo-wrap i { font-size: 32px; color: var(--gold); }
+        .brand-title { font-family: 'Cabinet Grotesk', sans-serif; font-size: 26px; font-weight: 900; color: #fff; }
 
         .live-promo-ribbon {
             background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.08);
@@ -95,40 +53,28 @@
             display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;
         }
 
-        /* UI Cards */
         .ui-card {
             background: var(--surface); border: 1px solid var(--border);
             border-radius: 20px; padding: 18px; margin-bottom: 14px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4); backdrop-filter: blur(12px);
         }
         .card-header { font-size: 14px; font-weight: 800; color: var(--gold); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
 
-        /* Auth Switch */
         .auth-tab-switch { display: flex; background: rgba(0,0,0,0.45); border-radius: 12px; padding: 4px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.06); }
-        .auth-tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-sub); font-weight: 800; font-size: 12px; border-radius: 9px; cursor: pointer; transition: 0.2s; }
-        .auth-tab-btn.active { background: linear-gradient(135deg, var(--gold), #ffaa00); color: #000; box-shadow: 0 4px 12px var(--gold-glow); }
+        .auth-tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-sub); font-weight: 800; font-size: 12px; border-radius: 9px; cursor: pointer; }
+        .auth-tab-btn.active { background: var(--gold); color: #000; font-weight: 900; }
 
         .input-box { 
             width: 100%; padding: 13px 14px; background: rgba(0,0,0,0.55); 
             border: 1px solid rgba(255, 215, 0, 0.25); border-radius: 12px; 
             color: #fff; font-size: 14px; margin-bottom: 12px; outline: none;
         }
-        .input-box:focus { border-color: var(--gold); box-shadow: 0 0 12px var(--gold-glow); }
-
         .btn-full { 
             width: 100%; padding: 14px; border: none; border-radius: 12px; 
             background: linear-gradient(135deg, var(--green), #059669); 
             color: #000; font-weight: 900; font-size: 14px; cursor: pointer; 
             display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .btn-whatsapp { background: #25d366 !important; color: #fff !important; box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35) !important; }
-
-        /* Features Badges */
-        .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
-        .feature-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 10px; text-align: center; }
-        .feature-item i { font-size: 18px; color: var(--gold); margin-bottom: 4px; display: block; }
-        .feature-item strong { font-size: 11px; display: block; }
-        .feature-item small { font-size: 9px; color: var(--text-sub); }
+        .btn-whatsapp { background: #25d366 !important; color: #fff !important; }
 
         .top-navbar {
             display: flex; justify-content: space-between; align-items: center;
@@ -138,36 +84,32 @@
         .user-greeting { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; cursor: pointer; }
         .top-balance { display: flex; align-items: center; gap: 6px; background: rgba(0, 255, 135, 0.15); color: var(--green); padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: 800; border: 1px solid rgba(0, 255, 135, 0.3); cursor: pointer; }
 
-        /* Dial & Arena */
-        .arena-wrapper { position: relative; width: 230px; height: 230px; margin: 10px auto 18px; display: flex; align-items: center; justify-content: center; }
-        .bezel-ring { position: absolute; width: 100%; height: 100%; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0%, rgba(255, 200, 55, 0.35) 50%, transparent 100%); animation: spinRing 6s linear infinite; }
-        @keyframes spinRing { 100% { transform: rotate(360deg); } }
+        .arena-wrapper { position: relative; width: 220px; height: 220px; margin: 10px auto 18px; display: flex; align-items: center; justify-content: center; }
         .dial-surface {
-            width: 200px; height: 200px; background: radial-gradient(circle at 35% 35%, #18233c 0%, #080c16 85%);
+            width: 195px; height: 195px; background: #101728;
             border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            text-align: center; border: 2px solid rgba(255, 215, 0, 0.2); box-shadow: 0 15px 35px rgba(0,0,0,0.6); z-index: 2; cursor: pointer;
+            text-align: center; border: 2px solid var(--gold); cursor: pointer;
         }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .winner-ticker { max-height: 140px; overflow: hidden; position: relative; }
         .winner-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: rgba(255, 255, 255, 0.03); border-radius: 8px; margin-bottom: 6px; font-size: 12px; }
         .team-member-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; margin-bottom: 8px; font-size: 13px; }
 
         .bottom-nav {
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 100%; max-width: 460px; background: rgba(10, 14, 24, 0.96);
-            border-top: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px);
+            width: 100%; max-width: 460px; background: rgba(10, 14, 24, 0.98);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex; justify-content: space-around; padding: 10px 0 8px; z-index: 99;
         }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--text-sub); font-size: 10px; font-weight: 700; cursor: pointer; gap: 4px; }
         .nav-item.active { color: var(--gold); }
 
-        .profile-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), #ff8c00); display: flex; align-items: center; justify-content: center; font-size: 28px; color: #000; margin: 0 auto 10px; border: 2px solid #fff; }
+        .profile-avatar { width: 70px; height: 70px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 28px; color: #000; margin: 0 auto 10px; }
         .profile-info-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 13px; }
 
-        .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 100; display: none; align-items: flex-end; justify-content: center; }
+        .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100; display: none; align-items: flex-end; justify-content: center; }
         .modal-body { width: 100%; max-width: 460px; background: #0e1526; border-radius: 24px 24px 0 0; padding: 20px; border-top: 1px solid rgba(255,255,255,0.15); max-height: 90vh; overflow-y: auto; }
         .upi-apps { display: flex; gap: 10px; margin: 12px 0; }
         .upi-btn { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; }
@@ -177,99 +119,65 @@
 
 <div class="app-container">
 
-    <!-- 1. AUTH SCREEN (LANDING & LOGIN) -->
-    <div id="authScreen">
-        <!-- Install App Button -->
+    <!-- 1. AUTH SCREEN -->
+    <div id="authScreen" style="display:block;">
         <div class="install-pwa-bar">
-            <div style="display:flex; align-items:center; gap:8px;">
-                <i class="fas fa-mobile-screen-button" style="color:var(--gold); font-size:18px;"></i>
-                <div>
-                    <strong style="font-size:12px; display:block;">Dhan Varsha Official App</strong>
-                    <small style="font-size:10px; color:var(--text-sub);">फ़ोन में इनस्टॉल करने के लिए क्लिक करें</small>
-                </div>
+            <div>
+                <strong style="font-size:12px; display:block;">Dhan Varsha Official App</strong>
+                <small style="font-size:10px; color:var(--text-sub);">फ़ोन में इनस्टॉल करने के लिए क्लिक करें</small>
             </div>
-            <button type="button" class="btn-install" id="btnInstallApp"><i class="fas fa-download"></i> इंस्टॉल करें</button>
+            <button class="btn-install" onclick="appInstallMsg()"><i class="fas fa-download"></i> इंस्टॉल करें</button>
         </div>
 
-        <!-- Brand Hero Header -->
         <div class="brand-hero">
             <div class="logo-wrap"><i class="fas fa-crown"></i></div>
             <h1 class="brand-title">DHAN VARSHA CLUB</h1>
-            <p class="brand-subtitle">👑 भारत का #1 लकी जैकपॉट क्लब 👑</p>
+            <p style="font-size:11px; color:var(--cyan); font-weight:700; text-transform:uppercase;">👑 भारत का #1 लकी जैकपॉट क्लब 👑</p>
         </div>
 
-        <!-- Live Winners Ticker -->
         <div class="live-promo-ribbon">
             <span style="color:var(--gold); font-weight:800;"><i class="fas fa-bolt"></i> Live Payout:</span>
             <span id="guestTickerText" style="color:var(--green); font-weight:700;">रोहित वर्मा ने ₹500 जीते!</span>
         </div>
 
-        <!-- Login / Register Card -->
+        <!-- AUTH BOX -->
         <div class="ui-card">
             <div class="auth-tab-switch">
-                <button type="button" class="auth-tab-btn active" id="btnTabLogin">लॉगिन (Login)</button>
-                <button type="button" class="auth-tab-btn" id="btnTabRegister">नया खाता (Register)</button>
+                <button class="auth-tab-btn active" id="tabBtnLogin" onclick="switchAuthTab('login')">लॉगिन (Login)</button>
+                <button class="auth-tab-btn" id="tabBtnRegister" onclick="switchAuthTab('register')">नया खाता (Register)</button>
             </div>
 
             <!-- Login Form -->
-            <div id="loginFormSection" style="display:block;">
-                <input type="tel" id="loginPhone" class="input-box" placeholder="📱 10-अंकों का मोबाइल नंबर" maxlength="10">
-                <input type="password" id="loginPin" class="input-box" placeholder="🔒 4-डिजिट गुप्त पासवर्ड/पिन" maxlength="4">
-                <button type="button" class="btn-full" id="btnLoginSubmit">लॉगिन करें ➔</button>
+            <div id="loginFormSec" style="display:block;">
+                <input type="tel" id="inpLoginPhone" class="input-box" placeholder="📱 10-अंकों का मोबाइल नंबर" maxlength="10">
+                <input type="password" id="inpLoginPin" class="input-box" placeholder="🔒 4-डिजिट गुप्त पासवर्ड/पिन" maxlength="4">
+                <button class="btn-full" onclick="doLogin()">लॉगिन करें ➔</button>
             </div>
 
             <!-- Register Form -->
-            <div id="registerFormSection" style="display:none;">
-                <input type="text" id="regName" class="input-box" placeholder="👤 आपका पूरा नाम">
-                <input type="tel" id="regPhone" class="input-box" placeholder="📱 10-अंकों का मोबाइल नंबर" maxlength="10">
-                <input type="password" id="regPin" class="input-box" placeholder="🔒 4-डिजिट नया पासवर्ड/पिन" maxlength="4">
-                <input type="tel" id="regRef" class="input-box" placeholder="🎁 रेफरल कोड (दोस्त का मोबाइल नंबर)">
-                <button type="button" class="btn-full" id="btnRegisterSubmit">नया खाता बनाएं ➔</button>
+            <div id="registerFormSec" style="display:none;">
+                <input type="text" id="inpRegName" class="input-box" placeholder="👤 आपका पूरा नाम">
+                <input type="tel" id="inpRegPhone" class="input-box" placeholder="📱 10-अंकों का मोबाइल नंबर" maxlength="10">
+                <input type="password" id="inpRegPin" class="input-box" placeholder="🔒 4-डिजिट नया पासवर्ड/पिन" maxlength="4">
+                <input type="tel" id="inpRegRef" class="input-box" placeholder="🎁 रेफरल कोड (दोस्त का मोबाइल नंबर)">
+                <button class="btn-full" onclick="doRegister()">नया खाता बनाएं ➔</button>
             </div>
         </div>
 
-        <!-- Features Grid -->
-        <div class="feature-grid">
-            <div class="feature-item">
-                <i class="fas fa-shield-halved"></i>
-                <strong>100% सुरक्षित सिस्टम</strong>
-                <small>ऑटोमैटिक UPI पेमेंट्स</small>
-            </div>
-            <div class="feature-item">
-                <i class="fas fa-bolt"></i>
-                <strong>तुरंत विड्रॉल</strong>
-                <small>सीधा बैंक/UPI में पैसा</small>
-            </div>
-            <div class="feature-item">
-                <i class="fas fa-sack-dollar"></i>
-                <strong>₹5 रेफरल बोनस</strong>
-                <small>हर दोस्त के जॉइन पर</small>
-            </div>
-            <div class="feature-item">
-                <i class="fas fa-headset"></i>
-                <strong>24x7 सपोर्ट</strong>
-                <small>ईमेल सहायता</small>
-            </div>
-        </div>
-
-        <!-- Support Footer -->
         <div style="text-align:center; padding:15px 0; border-top:1px solid rgba(255,255,255,0.06); margin-top:10px;">
             <p style="font-size:11px; color:var(--text-sub); margin-bottom:4px;">आधिकारिक सहायता ईमेल:</p>
             <a href="mailto:support@dhanvarsha.club" style="font-size:12px; color:var(--gold); text-decoration:none;"><i class="fas fa-envelope"></i> support@dhanvarsha.club</a>
-            <p style="font-size:10px; color:rgba(255,255,255,0.3); margin-top:8px;">© 2026 Dhan Varsha Club. All Rights Reserved.</p>
         </div>
     </div>
 
     <!-- 2. MAIN APP DASHBOARD -->
     <div id="mainDashboard" style="display:none;">
-        
-        <!-- Top Bar -->
         <div class="top-navbar">
-            <div class="user-greeting" id="topProfileBtn">
+            <div class="user-greeting" onclick="goTab('profile')">
                 <i class="fas fa-user-circle" style="font-size:22px; color:var(--gold);"></i>
                 <span id="userDisplayName">लोड हो रहा है...</span>
             </div>
-            <div class="top-balance" id="topWalletBtn">
+            <div class="top-balance" onclick="goTab('wallet')">
                 <i class="fas fa-wallet"></i> ₹<span id="userBalanceDisplay">0.00</span>
             </div>
         </div>
@@ -277,21 +185,16 @@
         <!-- TAB 1: HOME -->
         <div id="tab-home" class="tab-content active">
             <div class="arena-wrapper">
-                <div class="bezel-ring"></div>
-                <div class="dial-surface" id="btnOpenPlayModal">
+                <div class="dial-surface" onclick="openPaymentModal()">
                     <span style="font-size:9px; color:var(--gold); font-weight:800; letter-spacing:2px;">LIVE CONTEST</span>
                     <div style="font-family:'Cabinet Grotesk'; font-size:22px; font-weight:900; color:#fff; margin:4px 0 8px;">DHAN JACKPOT</div>
-                    <button type="button" style="background:linear-gradient(135deg, var(--green), #00c853); color:#000; padding:7px 20px; border-radius:30px; font-weight:800; font-size:13px; border:none; pointer-events:none;">₹50 ENTRY</button>
+                    <button style="background:linear-gradient(135deg, var(--green), #00c853); color:#000; padding:7px 20px; border-radius:30px; font-weight:800; font-size:13px; border:none; pointer-events:none;">₹50 ENTRY</button>
                     <div style="font-size:11px; font-weight:700; color:var(--cyan); margin-top:8px;" id="liveSlotText">0 / 50 स्लॉट</div>
                 </div>
             </div>
 
-            <!-- Prize Details -->
             <div class="ui-card">
-                <div class="card-header">
-                    <span>👑 प्राइज़ पूल विवरण</span>
-                    <span style="font-size:11px; color:var(--green);">10 Winners</span>
-                </div>
+                <div class="card-header"><span>👑 प्राइज़ पूल विवरण</span><span style="font-size:11px; color:var(--green);">10 Winners</span></div>
                 <div style="font-size:12px; color:var(--text-sub); line-height:1.6;">
                     🥇 <strong>1st Prize:</strong> ₹500 (10x Return)<br>
                     🥈 <strong>2nd Prize:</strong> ₹250 (5x Return)<br>
@@ -299,21 +202,17 @@
                 </div>
             </div>
 
-            <!-- Live Winners List -->
             <div class="ui-card">
-                <div class="card-header">
-                    <span>🏆 लाइव विजेता (Live Payouts)</span>
-                    <span style="color:var(--green); font-size:11px; font-weight:800;">● 24x7 LIVE</span>
-                </div>
-                <div class="winner-ticker" id="winnerTickerList"></div>
+                <div class="card-header"><span>🏆 लाइव विजेता (Live Payouts)</span><span style="color:var(--green); font-size:11px; font-weight:800;">● 24x7 LIVE</span></div>
+                <div id="winnerTickerList"></div>
             </div>
 
-            <!-- HOME PAGE REFERRAL CARD -->
+            <!-- Home Page Referral Box -->
             <div class="ui-card" style="text-align:center; background:linear-gradient(135deg, rgba(255,200,55,0.08), rgba(0,255,135,0.08)); border-color:var(--gold);">
                 <i class="fas fa-gift" style="font-size:24px; color:var(--gold); margin-bottom:6px;"></i>
                 <h3 style="font-size:15px; margin-bottom:4px;">रेफर करें और कमाएं (₹5 / Member)</h3>
                 <p style="font-size:11px; color:var(--text-sub); margin-bottom:10px;">दोस्तों को इनवाइट करें और हर ₹50 एंट्री पर पाएँ ₹5.00 तुरंत!</p>
-                <button type="button" class="btn-full btn-whatsapp" id="btnHomeShareWa">
+                <button class="btn-full btn-whatsapp" onclick="shareWhatsApp()">
                     <i class="fab fa-whatsapp" style="font-size:18px;"></i> WhatsApp पर अभी शेयर करें ➔
                 </button>
             </div>
@@ -327,12 +226,11 @@
                 <p style="font-size:11px; color:var(--text-sub);">आपका रेफरल कोड (मोबाइल नंबर):</p>
                 <div style="background:rgba(0,242,254,0.1); border:1px dashed var(--cyan); color:var(--cyan); font-size:18px; font-weight:900; letter-spacing:2px; padding:6px 14px; border-radius:10px; display:inline-block; margin:8px 0;" id="myReferralDisplay">------</div>
                 
-                <button type="button" class="btn-full btn-whatsapp" style="margin-top:6px;" id="btnTeamShareWa">
+                <button class="btn-full btn-whatsapp" style="margin-top:6px;" onclick="shareWhatsApp()">
                     <i class="fab fa-whatsapp"></i> दोस्तों को इनवाइट लिंक भेजें
                 </button>
             </div>
 
-            <!-- Joined Members List -->
             <div class="ui-card">
                 <div class="card-header">
                     <span>👥 जुड़े हुए मेंबर्स (<span id="teamCountText" style="color:var(--green);">0</span>)</span>
@@ -346,5 +244,81 @@
 
         <!-- TAB 3: WALLET -->
         <div id="tab-wallet" class="tab-content">
-            <div class="ui-card" style="text-align:center; background:linear-gradient(135deg,#18233c,#0c1220);">
-                <span style="font-size:11px; color:
+            <div class="ui-card" style="text-align:center;">
+                <span style="font-size:11px; color:var(--text-sub);">उपलब्ध बैलेंस (Total Balance)</span>
+                <div style="font-family:'Cabinet Grotesk'; font-size:36px; font-weight:900; color:var(--green); margin:6px 0;">₹<span id="walletBalanceVal">0.00</span></div>
+            </div>
+
+            <div class="ui-card">
+                <div class="card-header"><span>💸 तुरंत UPI विड्रॉल</span><small>Min: ₹50</small></div>
+                <input type="number" class="input-box" id="inpWithdrawAmt" placeholder="राशि (उदा. ₹50)">
+                <input type="text" class="input-box" id="inpWithdrawUpi" placeholder="UPI ID (उदा. 9876543210@paytm)">
+                <button class="btn-full" onclick="submitWithdraw()">विड्रॉल रिक्वेस्ट भेजें ➔</button>
+            </div>
+        </div>
+
+        <!-- TAB 4: PROFILE -->
+        <div id="tab-profile" class="tab-content">
+            <div class="ui-card" style="text-align:center;">
+                <div class="profile-avatar"><i class="fas fa-user"></i></div>
+                <h3 id="profNameDisplay" style="font-size:18px; margin-bottom:2px;">---</h3>
+                <span style="font-size:11px; color:var(--gold); font-weight:700;">VERIFIED MEMBER</span>
+            </div>
+
+            <div class="ui-card">
+                <div class="card-header">
+                    <span>📋 मेरी प्रोफाइल जानकारी</span>
+                    <button onclick="openEditProfileModal()" style="background:var(--gold); color:#000; border:none; padding:4px 10px; border-radius:6px; font-weight:800; font-size:11px; cursor:pointer;"><i class="fas fa-pen"></i> एडिट करें</button>
+                </div>
+                <div class="profile-info-row">
+                    <span style="color:var(--text-sub);">पूरा नाम</span>
+                    <strong id="profInfoName">---</strong>
+                </div>
+                <div class="profile-info-row">
+                    <span style="color:var(--text-sub);">मोबाइल नंबर</span>
+                    <strong id="profInfoPhone">---</strong>
+                </div>
+                <div class="profile-info-row">
+                    <span style="color:var(--text-sub);">पासवर्ड / पिन</span>
+                    <strong style="color:var(--gold); letter-spacing:2px;">••••</strong>
+                </div>
+                <div class="profile-info-row">
+                    <span style="color:var(--text-sub);">मेरा रेफरल कोड</span>
+                    <strong style="color:var(--cyan);" id="profInfoRef">---</strong>
+                </div>
+            </div>
+
+            <button class="btn-full" style="background:rgba(255,71,87,0.15); color:#ff4757; border:1px solid rgba(255,71,87,0.3);" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i> अकाउंट लॉगआउट करें
+            </button>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" id="nav-btn-home" onclick="goTab('home')"><i class="fas fa-house"></i><span>Home</span></div>
+            <div class="nav-item" id="nav-btn-team" onclick="goTab('team')"><i class="fas fa-users"></i><span>My Team</span></div>
+            <div class="nav-item" id="nav-btn-wallet" onclick="goTab('wallet')"><i class="fas fa-wallet"></i><span>Wallet</span></div>
+            <div class="nav-item" id="nav-btn-profile" onclick="goTab('profile')"><i class="fas fa-user"></i><span>Profile</span></div>
+        </div>
+    </div>
+
+    <!-- Modal 1: Payment -->
+    <div class="modal-bg" id="paymentModal">
+        <div class="modal-body">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <h3 style="font-size:16px;">एंट्री फीस: ₹50</h3>
+                <span onclick="closePaymentModal()" style="font-size:24px; color:var(--text-sub); cursor:pointer;">&times;</span>
+            </div>
+
+            <div class="upi-apps">
+                <a id="gpayLink" class="upi-btn"><i class="fab fa-google-pay"></i> GPay</a>
+                <a id="phonepeLink" class="upi-btn"><i class="fas fa-mobile-screen"></i> PhonePe</a>
+                <a id="paytmLink" class="upi-btn"><i class="fas fa-wallet"></i> Paytm</a>
+            </div>
+
+            <div style="background:#fff; padding:6px; border-radius:10px; width:140px; height:140px; margin:10px auto; display:flex;">
+                <img id="qrImg" src="" alt="QR" style="width:100%;">
+            </div>
+            <p style="font-size:10px; color:var(--text-sub); text-align:center; margin-bottom:12px;">स्कैन करें या ऊपर दिए ऐप बटन पर क्लिक करें</p>
+
+            <input type="number" id="inpUtrNumber" class="input-box" placeholder="12-अंकों का बैं
