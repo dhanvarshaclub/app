@@ -3,45 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Dhan Varsha Club | भारत का सबसे भरोसेमंद लकी ड्रा प्लेटफॉर्म</title>
+  <title>Dhan Varsha Club</title>
+  
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#f59e0b" />
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
-    @keyframes marquee {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(-100%); }
-    }
-    .ticker-track {
-      display: inline-flex;
-      white-space: nowrap;
-      animation: marquee 20s linear infinite;
-    }
+    @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    .ticker-track { display: inline-flex; white-space: nowrap; animation: marquee 20s linear infinite; }
     ::-webkit-scrollbar { display: none; }
-    * { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex justify-center selection:bg-amber-500">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex justify-center">
 
-  <div class="w-full max-w-md bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border-x border-slate-800 flex flex-col min-h-screen shadow-2xl relative">
+  <div class="w-full max-w-md bg-slate-900 border-x border-slate-800 flex flex-col min-h-screen relative">
 
-    <!-- ================= VIEW 1: OFFICIAL WEBSITE (PUBLIC LANDING PAGE) ================= -->
-    <div id="websiteView" class="flex flex-col flex-1">
+    <!-- ================= 1. WEBSITE LANDING PAGE ================= -->
+    <div id="websiteView" class="flex flex-col flex-1 pb-16">
       
-      <!-- Top Sticky Bar -->
+      <!-- Top Install Banner -->
       <div class="bg-gradient-to-r from-amber-500 to-yellow-400 p-2.5 text-slate-950 flex items-center justify-between sticky top-0 z-50 shadow-lg">
         <div class="flex items-center gap-1.5 font-black text-xs">
           <span>📲</span>
           <span>ऑफिशियल धन वर्षा क्लब ऐप</span>
         </div>
-        <button onclick="triggerInstall()" class="bg-slate-950 text-amber-400 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider active:scale-95 transition">
-          इंस्टॉल करें
+        <button onclick="installAppDirectly()" class="bg-slate-950 text-amber-400 px-3.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider active:scale-95 transition">
+          Install
         </button>
       </div>
 
       <!-- Hero Header -->
-      <header class="p-6 text-center space-y-3 bg-gradient-to-b from-slate-900 to-slate-950 border-b border-slate-800/80">
+      <div class="p-6 text-center space-y-3 bg-gradient-to-b from-slate-900 to-slate-950 border-b border-slate-800">
         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-600 mx-auto flex items-center justify-center text-slate-950 font-black text-3xl shadow-xl shadow-amber-500/20">
           ₹
         </div>
@@ -49,30 +44,36 @@
           <span class="inline-block bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-1">
             ✓ 100% Legal & Safe Community
           </span>
-          <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500">
+          <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-500">
             DHAN VARSHA CLUB
           </h1>
           <p class="text-xs text-slate-400 mt-1">सिर्फ ₹50 में अपनी किस्मत आजमाएं और हर राउंड में ₹500 तक जीतें!</p>
         </div>
 
-        <!-- Big Download / Install CTA Button -->
-        <div class="pt-2">
-          <button onclick="triggerInstall()" class="w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:brightness-110 text-slate-950 font-black py-4 rounded-2xl shadow-xl shadow-amber-500/20 active:scale-[0.98] transition flex items-center justify-center gap-2 text-sm uppercase tracking-wider">
+        <div class="pt-2 space-y-2">
+          <button onclick="installAppDirectly()" class="w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-slate-950 font-black py-4 rounded-2xl shadow-xl shadow-amber-500/20 active:scale-[0.98] transition flex items-center justify-center gap-2 text-sm uppercase tracking-wider">
             <span>📥</span>
-            <span>ऐप इंस्टॉल करें और खेलना शुरू करें</span>
+            <span>ऐप डाउनलोड / इंस्टॉल करें</span>
           </button>
-          <p class="text-[10px] text-slate-500 mt-2">🔒 सुरक्षित ऐप • नो स्पैम • 1 क्लिक ऑटो इंस्टॉल</p>
+          
+          <!-- Direct Browser Test Button (Agar bina install kiye test karna ho) -->
+          <button onclick="openDirectAppMode()" class="w-full bg-slate-800/80 hover:bg-slate-800 border border-slate-700 text-slate-300 font-bold py-2.5 rounded-xl text-xs active:scale-95 transition">
+            या ब्राउज़र में खेलें (Play Online)
+          </button>
         </div>
-      </header>
+      </div>
 
-      <!-- 24x7 Live Ticker -->
+      <!-- Live Winner Ticker -->
       <div class="bg-amber-400/10 border-b border-amber-500/20 py-2 px-2 flex items-center gap-2 overflow-hidden text-xs">
         <span class="bg-red-600 text-white font-black px-1.5 py-0.5 rounded text-[9px] uppercase tracking-wider animate-pulse shrink-0">
-          LIVE WINNERS
+          LIVE
         </span>
         <div class="overflow-hidden w-full">
-          <div id="websiteTicker" class="ticker-track text-[11px] font-medium text-slate-300">
-            <!-- Dynamic ticker -->
+          <div class="ticker-track text-[11px] font-medium text-slate-300">
+            <span class="mx-3">🎉 राहुल ने जीते <strong class="text-emerald-400 font-bold">₹500</strong></span>
+            <span class="mx-3">🎉 अमित ने जीते <strong class="text-emerald-400 font-bold">₹250</strong></span>
+            <span class="mx-3">🎉 सुनील ने जीते <strong class="text-emerald-400 font-bold">₹100</strong></span>
+            <span class="mx-3">🎉 विकास ने जीते <strong class="text-emerald-400 font-bold">₹100</strong></span>
           </div>
         </div>
       </div>
@@ -82,162 +83,96 @@
         <div class="bg-slate-900 border border-slate-800 p-3 rounded-2xl text-center space-y-1">
           <span class="text-xl">🛡️</span>
           <h4 class="text-[11px] font-bold text-white">100% सुरक्षित</h4>
-          <p class="text-[9px] text-slate-400">वेरिफाइड विनर सिस्टम</p>
+          <p class="text-[9px] text-slate-400">पारदर्शी परिणाम</p>
         </div>
         <div class="bg-slate-900 border border-slate-800 p-3 rounded-2xl text-center space-y-1">
           <span class="text-xl">⚡</span>
-          <h4 class="text-[11px] font-bold text-white">तुरंत निकासी</h4>
-          <p class="text-[9px] text-slate-400">UPI / बैंक ट्रांसफर</p>
+          <h4 class="text-[11px] font-bold text-white">तुरंत नकद</h4>
+          <p class="text-[9px] text-slate-400">UPI ट्रांसफर</p>
         </div>
         <div class="bg-slate-900 border border-slate-800 p-3 rounded-2xl text-center space-y-1">
           <span class="text-xl">🎁</span>
           <h4 class="text-[11px] font-bold text-white">₹5 रेफरल</h4>
-          <p class="text-[9px] text-slate-400">हर एक्टिव दोस्त पर</p>
-        </div>
-      </div>
-
-      <!-- How It Works Section -->
-      <div class="p-4 space-y-3">
-        <h3 class="text-xs font-black text-amber-400 uppercase tracking-wider">धन वर्षा क्लब कैसे काम करता है?</h3>
-        
-        <div class="space-y-2.5">
-          <div class="bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 text-xs shrink-0">
-              1
-            </div>
-            <div>
-              <h4 class="text-xs font-bold text-white">ऐप इंस्टॉल और मुफ़्त रजिस्ट्रेशन</h4>
-              <p class="text-[10px] text-slate-400">ऊपर दिए बटन से ऐप इंस्टॉल करें और 10 सेकंड में मोबाइल नंबर से फ्री आईडी बनाएं।</p>
-            </div>
-          </div>
-
-          <div class="bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 text-xs shrink-0">
-              2
-            </div>
-            <div>
-              <h4 class="text-xs font-bold text-white">₹50 पूल में शामिल हों</h4>
-              <p class="text-[10px] text-slate-400">पूल में 50 लोग होते हैं। जैसे ही 50 लोग पूरे होंगे, 10 सेकंड का लाइव टाइमर चलेगा।</p>
-            </div>
-          </div>
-
-          <div class="bg-slate-900/80 border border-slate-800 p-3.5 rounded-2xl flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center font-black text-amber-400 text-xs shrink-0">
-              3
-            </div>
-            <div>
-              <h4 class="text-xs font-bold text-white">10 विजेता और बड़ा इनाम</h4>
-              <p class="text-[10px] text-slate-400">1st विजेता को ₹500, 2nd को ₹250 और 3 से 10 तक सभी को ₹100-₹100 तुरंत मिलेंगे।</p>
-            </div>
-          </div>
+          <p class="text-[9px] text-slate-400">अनलिमिटेड कमाई</p>
         </div>
       </div>
 
       <!-- Prize Chart Table -->
       <div class="p-4 space-y-2">
-        <h3 class="text-xs font-black text-white uppercase tracking-wider">पारदर्शी इनाम चार्ट (Prize Pool Matrix)</h3>
+        <h3 class="text-xs font-black text-white uppercase tracking-wider">इनाम वितरण तालिका (50-पूल)</h3>
         <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden text-xs">
           <div class="grid grid-cols-2 bg-slate-950 p-2.5 font-bold border-b border-slate-800 text-slate-400 text-[11px]">
-            <span>रैंक (Rank)</span>
-            <span class="text-right">पुरस्कार राशि (Prize)</span>
+            <span>रैंक</span>
+            <span class="text-right">इनाम राशि</span>
           </div>
           <div class="grid grid-cols-2 p-2.5 border-b border-slate-800/60 items-center">
-            <span class="font-bold text-amber-400">🥇 1st Rank (प्रथम विजेता)</span>
+            <span class="font-bold text-amber-400">🥇 1st Winner</span>
             <span class="text-right font-black text-emerald-400 text-sm">₹500</span>
           </div>
           <div class="grid grid-cols-2 p-2.5 border-b border-slate-800/60 items-center">
-            <span class="font-bold text-amber-300">🥈 2nd Rank (द्वितीय विजेता)</span>
+            <span class="font-bold text-amber-300">🥈 2nd Winner</span>
             <span class="text-right font-black text-emerald-400 text-sm">₹250</span>
           </div>
           <div class="grid grid-cols-2 p-2.5 items-center bg-slate-950/40">
-            <span class="text-slate-300">🥉 Rank 3 से 10 (8 विजेता)</span>
+            <span class="text-slate-300">🥉 3rd to 10th (8 लोग)</span>
             <span class="text-right font-bold text-emerald-400">₹100 प्रत्येक</span>
           </div>
         </div>
       </div>
 
-      <!-- Bottom Sticky Download Bar -->
-      <div class="p-4 mt-auto border-t border-slate-800/80 bg-slate-950 sticky bottom-0 z-40">
-        <button onclick="triggerInstall()" class="w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-slate-950 font-black py-3.5 rounded-xl shadow-lg active:scale-95 transition text-xs uppercase tracking-wider">
-          📲 ऐप इंस्टॉल करके खेलना शुरू करें
-        </button>
-      </div>
-
-      <!-- Footer -->
-      <footer class="p-4 text-center text-[10px] text-slate-600 space-y-1">
-        <p>© 2026 Dhan Varsha Club • All Rights Reserved</p>
-        <p>यह केवल मनोरंजन और कौशल आधारित सामुदायिक लकी ड्रा प्लेटफॉर्म है। 18+ केवल।</p>
-      </footer>
     </div>
 
-    <!-- ================= VIEW 2: APP LOGIN / REGISTER (ONLY ACCESSIBLE IN INSTALLED APP) ================= -->
-    <div id="appAuthView" class="hidden flex-1 flex flex-col justify-center p-6 space-y-6">
-      <div class="text-center space-y-2">
-        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-600 mx-auto flex items-center justify-center text-slate-950 font-black text-2xl shadow-xl shadow-amber-500/20">
+    <!-- ================= 2. APP AUTH SCREEN (LOGIN / REGISTER) ================= -->
+    <div id="appAuthView" class="hidden flex-1 flex flex-col justify-center p-6 space-y-5">
+      <div class="text-center space-y-1">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-600 mx-auto flex items-center justify-center text-slate-950 font-black text-2xl shadow-lg">
           ₹
         </div>
         <h2 class="text-xl font-black text-white">DHAN VARSHA APP</h2>
-        <p class="text-xs text-slate-400">कृपया अपना मोबाइल नंबर दर्ज करके लॉगिन करें</p>
+        <p class="text-xs text-slate-400">फ्री रजिस्ट्रेशन करें या लॉगिन करें</p>
       </div>
 
       <div class="bg-slate-950 p-1 rounded-xl flex border border-slate-800">
-        <button id="authTabReg" onclick="setAuthTab('reg')" class="flex-1 py-2 text-xs font-black rounded-lg bg-amber-500 text-slate-950 transition">
-          रजिस्टर (Free)
-        </button>
-        <button id="authTabLog" onclick="setAuthTab('log')" class="flex-1 py-2 text-xs font-bold text-slate-400 hover:text-white transition">
-          लॉगिन
-        </button>
+        <button id="tabRegBtn" onclick="toggleAuth('reg')" class="flex-1 py-2 text-xs font-black rounded-lg bg-amber-500 text-slate-950 transition">रजिस्टर (Free)</button>
+        <button id="tabLogBtn" onclick="toggleAuth('log')" class="flex-1 py-2 text-xs font-bold text-slate-400 transition">लॉगिन</button>
       </div>
 
-      <form onsubmit="handleAppLogin(event)" class="bg-slate-950/80 border border-slate-800 p-5 rounded-2xl space-y-4 shadow-xl">
-        <div id="fieldFullName">
+      <form onsubmit="handleAuth(event)" class="bg-slate-950 border border-slate-800 p-5 rounded-2xl space-y-3 shadow-xl">
+        <div id="nameInputWrapper">
           <label class="text-xs text-slate-400 block mb-1 font-semibold">पूरा नाम</label>
-          <input id="inputAppName" type="text" placeholder="e.g. Rahul Sharma" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-amber-400 outline-none" />
+          <input id="userName" type="text" placeholder="e.g. Rahul Sharma" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:border-amber-400 outline-none" />
         </div>
-
         <div>
           <label class="text-xs text-slate-400 block mb-1 font-semibold">मोबाइल नंबर</label>
-          <input id="inputAppPhone" type="tel" required maxlength="10" placeholder="10 अंकों का नंबर" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:border-amber-400 outline-none" />
+          <input id="userPhone" type="tel" required maxlength="10" placeholder="10 अंकों का नंबर" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:border-amber-400 outline-none" />
         </div>
-
-        <div id="fieldReferral">
+        <div id="refInputWrapper">
           <label class="text-xs text-slate-400 block mb-1 font-semibold">रेफरल कोड (वैकल्पिक)</label>
-          <input id="inputAppRef" type="text" placeholder="DVC1234" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white uppercase focus:border-amber-400 outline-none" />
+          <input id="userRef" type="text" placeholder="DVC1234" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white uppercase focus:border-amber-400 outline-none" />
         </div>
-
-        <button type="submit" id="authSubmitText" class="w-full bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black py-3 rounded-xl shadow-lg active:scale-95 transition text-sm">
-          अकाउंट बनाएं और ऐप में प्रवेश करें
+        <button type="submit" id="authBtnSubmit" class="w-full bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black py-3 rounded-xl shadow-lg active:scale-95 transition text-sm mt-1">
+          प्रवेश करें
         </button>
       </form>
     </div>
 
-    <!-- ================= VIEW 3: IN-APP DASHBOARD (AFTER LOGIN) ================= -->
+    <!-- ================= 3. IN-APP GAME DASHBOARD ================= -->
     <div id="appDashboardView" class="hidden flex-1 flex flex-col pb-6">
-      
-      <!-- App Header -->
-      <header class="p-3.5 bg-slate-950/90 border-b border-slate-800 flex justify-between items-center sticky top-0 z-40">
+      <header class="p-3.5 bg-slate-950 border-b border-slate-800 flex justify-between items-center sticky top-0 z-40">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-slate-950 font-black">₹</div>
-          <div>
-            <h2 class="text-sm font-black text-amber-400">DHAN VARSHA CLUB</h2>
-            <span class="text-[10px] text-emerald-400 font-semibold">● App Verified Active</span>
-          </div>
+          <h2 class="text-sm font-black text-amber-400">DHAN VARSHA CLUB</h2>
         </div>
-
         <div class="flex items-center gap-2">
           <div class="bg-slate-900 border border-amber-500/30 px-3 py-1 rounded-xl flex items-center gap-1.5">
             <span class="text-[10px] text-slate-400">Wallet:</span>
-            <span id="inAppWallet" class="font-black text-emerald-400 text-xs">₹0</span>
+            <span id="walletVal" class="font-black text-emerald-400 text-xs">₹0</span>
           </div>
-          <button onclick="logoutApp()" class="text-xs bg-slate-800 text-slate-400 px-2.5 py-1 rounded-lg border border-slate-700">
-            Exit
-          </button>
+          <button onclick="logout()" class="text-xs bg-slate-800 text-slate-400 px-2.5 py-1 rounded-lg border border-slate-700">Exit</button>
         </div>
       </header>
 
-      <!-- Main Game Arena -->
       <div class="p-4 space-y-4 flex-1">
-        
         <!-- Pool Card -->
         <div class="bg-gradient-to-b from-slate-900 to-slate-950 border border-amber-500/30 p-5 rounded-3xl shadow-xl space-y-4">
           <div class="flex justify-between items-center">
@@ -246,126 +181,212 @@
               <h3 class="text-lg font-black text-white mt-1">Mega Lucky Jackpot</h3>
             </div>
             <div class="text-right">
-              <span class="text-[10px] text-slate-400 block font-semibold">ENTRY FEE</span>
+              <span class="text-[10px] text-slate-400 block font-semibold">ENTRY</span>
               <span class="text-base font-black text-emerald-400">₹50</span>
             </div>
           </div>
 
-          <!-- Progress -->
           <div class="space-y-1">
             <div class="flex justify-between text-xs font-semibold">
-              <span class="text-slate-400">Players: <strong id="inAppCount" class="text-white">47</strong>/50</span>
-              <span id="inAppSeatsLeft" class="text-amber-400">3 Seats Left</span>
+              <span class="text-slate-400">Players: <strong id="poolCount" class="text-white">48</strong>/50</span>
+              <span id="poolSeats" class="text-amber-400">2 Seats Left</span>
             </div>
             <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden p-0.5 border border-slate-800">
-              <div id="inAppProgress" class="bg-gradient-to-r from-amber-500 to-yellow-300 h-full rounded-full transition-all duration-300" style="width: 94%;"></div>
+              <div id="poolBar" class="bg-gradient-to-r from-amber-500 to-yellow-300 h-full rounded-full transition-all duration-300" style="width: 96%;"></div>
             </div>
           </div>
 
-          <!-- Payout Matrix -->
           <div class="grid grid-cols-3 gap-2 bg-slate-950 p-3 rounded-2xl border border-slate-800 text-center text-xs">
-            <div class="border-r border-slate-800">
-              <span class="text-[10px] text-slate-400 block">1st Rank</span>
-              <span class="text-amber-400 font-black text-sm">₹500</span>
-            </div>
-            <div class="border-r border-slate-800">
-              <span class="text-[10px] text-slate-400 block">2nd Rank</span>
-              <span class="text-amber-400 font-black text-sm">₹250</span>
-            </div>
-            <div>
-              <span class="text-[10px] text-slate-400 block">3rd-10th</span>
-              <span class="text-amber-400 font-black text-sm">₹100 each</span>
-            </div>
+            <div><span class="text-[10px] text-slate-400 block">1st</span><span class="text-amber-400 font-black">₹500</span></div>
+            <div><span class="text-[10px] text-slate-400 block">2nd</span><span class="text-amber-400 font-black">₹250</span></div>
+            <div><span class="text-[10px] text-slate-400 block">3rd-10th</span><span class="text-amber-400 font-black">₹100 each</span></div>
           </div>
 
-          <!-- Countdown -->
-          <div id="inAppTimerBox" class="hidden bg-red-950/40 border border-red-500/50 p-3 rounded-2xl text-center font-black animate-pulse">
-            <div class="text-xs text-red-400 uppercase">50 Players Complete! Announcing Winners in:</div>
-            <div class="text-2xl text-white font-mono mt-0.5">00:<span id="inAppTimerSec">10</span></div>
+          <div id="timerBox" class="hidden bg-red-950/40 border border-red-500/50 p-3 rounded-2xl text-center font-black animate-pulse">
+            <div class="text-xs text-red-400 uppercase">50 Players Complete! Winners in:</div>
+            <div class="text-2xl text-white font-mono mt-0.5">00:<span id="timerSec">10</span></div>
           </div>
 
-          <!-- Action Button -->
-          <button id="inAppPayBtn" onclick="triggerUPIPayment()" class="w-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 hover:brightness-110 text-slate-950 font-black py-3.5 rounded-2xl shadow-xl active:scale-[0.98] transition text-sm uppercase tracking-wide">
+          <button id="poolPayBtn" onclick="openPayment()" class="w-full bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black py-3.5 rounded-2xl shadow-xl active:scale-[0.98] transition text-sm uppercase">
             PAY ₹50 & JOIN POOL
           </button>
         </div>
 
-        <!-- WhatsApp Referral Box -->
-        <div class="bg-slate-950 border border-amber-500/30 p-4 rounded-2xl space-y-3 shadow-lg">
+        <!-- WhatsApp Referral -->
+        <div class="bg-slate-950 border border-amber-500/30 p-4 rounded-2xl space-y-3">
           <div class="flex justify-between items-center">
-            <div>
-              <h4 class="text-xs font-black text-white uppercase tracking-wider">Refer & Earn ₹5 Instant</h4>
-              <p class="text-[10px] text-slate-400">हर रेफरल पर ₹5 तुरंत जब दोस्त ₹50 से जॉइन करे</p>
-            </div>
-            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-black px-2 py-0.5 rounded">Unlimited</span>
+            <h4 class="text-xs font-black text-white uppercase">Refer & Earn ₹5 Instant</h4>
+            <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-black px-2 py-0.5 rounded">Unlimited</span>
           </div>
-
-          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-xs text-slate-300 leading-relaxed font-sans">
-            <p class="font-bold text-amber-300">🔥 धन वर्षा क्लब - सिर्फ ₹50 लगाकर अपनी किस्मत आजमाएं और हर राउंड में ₹500 तक जीतें!</p>
-            <p class="text-[10px] text-slate-400 mt-1">100% पारदर्शी और लाइव रिजल्ट्स। अभी जुड़े धन वर्षा क्लब के साथ:</p>
-            <div class="mt-2 text-[10px] text-amber-400 font-mono bg-slate-950 p-1.5 rounded border border-slate-800 break-all" id="appRefLink">
-              https://dhan-varsha-club.web.app/?ref=DVC0000
-            </div>
-          </div>
-
-          <div class="flex gap-2">
-            <button onclick="shareWhatsApp()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs active:scale-95 transition">
-              Share on WhatsApp
-            </button>
-            <button onclick="copyShareText()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 border border-amber-500/20 px-4 py-2.5 rounded-xl text-xs font-bold active:scale-95 transition">
-              Copy
-            </button>
-          </div>
+          <button onclick="shareWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs active:scale-95 transition">
+            Share on WhatsApp
+          </button>
         </div>
-
       </div>
-
     </div>
 
-    <!-- ================= UPI CHECKOUT POPUP ================= -->
-    <div id="paymentModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 space-y-4 shadow-2xl">
-        <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-          <h3 class="text-sm font-black text-white">Select UPI App to Pay</h3>
-          <button onclick="closePayment()" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
+    <!-- ================= MANUAL INSTALL GUIDE MODAL ================= -->
+    <div id="installGuideModal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4">
+      <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-3xl p-5 space-y-4 text-center">
+        <span class="text-4xl">📲</span>
+        <h3 class="text-base font-black text-white">ऐप सीधे स्क्रीन पर जोड़ें</h3>
+        <div class="bg-slate-950 p-3 rounded-2xl text-xs text-slate-300 text-left space-y-2 border border-slate-800">
+          <p>1. ब्राउज़र में सबसे ऊपर दायें कोने में <strong>3 डॉट्स (⋮)</strong> पर क्लिक करें।</p>
+          <p>2. मेनू में <strong>'Add to Home screen'</strong> या <strong>'Install app'</strong> चुनें।</p>
+          <p>3. ऐप आपके फोन के होम पेज पर आइकन बन कर आ जाएगी!</p>
         </div>
-
-        <div class="text-center py-2">
-          <span class="text-xs text-slate-400 block font-semibold">Entry Amount</span>
-          <span class="text-3xl font-black text-emerald-400">₹50.00</span>
-        </div>
-
-        <!-- Launch PhonePe / GPay / Paytm -->
-        <a id="upiIntentLink" href="#" class="w-full bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 font-black py-3.5 rounded-xl text-center block text-sm active:scale-95 transition">
-          Open PhonePe / GPay / Paytm
-        </a>
-
-        <!-- Fallback Confirmation -->
-        <button onclick="handlePaymentSuccess()" class="w-full bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold py-3 rounded-xl transition">
-          I Have Paid ₹50 (Confirm Seat)
+        <button onclick="document.getElementById('installGuideModal').classList.add('hidden')" class="w-full bg-amber-500 text-slate-950 font-black py-2.5 rounded-xl text-xs">
+          समझ गया (Got It)
         </button>
+      </div>
+    </div>
+
+    <!-- UPI Modal -->
+    <div id="paymentModal" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-3xl p-5 space-y-4 text-center">
+        <h3 class="text-sm font-black text-white">Select UPI App</h3>
+        <span class="text-2xl font-black text-emerald-400 block">₹50.00</span>
+        <a id="upiLink" href="#" class="w-full bg-emerald-500 text-slate-950 font-black py-3 rounded-xl block text-xs uppercase">Open PhonePe / GPay / Paytm</a>
+        <button onclick="confirmSeat()" class="w-full bg-slate-800 text-white text-xs font-bold py-2.5 rounded-xl">I Have Paid ₹50 (Confirm)</button>
+        <button onclick="document.getElementById('paymentModal').classList.add('hidden')" class="text-xs text-slate-500">Cancel</button>
       </div>
     </div>
 
   </div>
 
   <script>
-    // ---------------------------------------------
-    // CONFIGURATION
-    // ---------------------------------------------
-    const UPI_ID = "ankurnamdev@upi"; // Yahan apni UPI ID set karein
-    const PAYEE_NAME = "Dhan Varsha Club";
-
+    const UPI_ID = "ankurnamdev@upi"; // Apni UPI ID dalein
     let deferredPrompt = null;
-    let poolEntries = 47;
-    let isDrawing = false;
+    let poolEntries = 48;
     let authMode = "reg";
-
-    const WINNER_NAMES = ["राहुल (दिल्ली)", "अमित (जयपुर)", "सुनील (कानपुर)", "विक्रम (पटना)", "दीपक (लखनऊ)", "सोनू (इंदौर)", "मनोज (भोपाल)", "संजय (सूरत)"];
-
-    // Check if running in standalone (Installed App mode)
-    const isRunningAsApp = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
     let currentUser = JSON.parse(localStorage.getItem("dvc_user")) || null;
 
+    // Service Worker Register
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    }
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
     window.onload = () => {
-      initWebsiteTicker(
+      const urlParams = new URLSearchParams(window.location.search);
+      const isAppMode = window.matchMedia('(display-mode: standalone)').matches || urlParams.get("mode") === "app";
+
+      if (isAppMode) {
+        if (currentUser) showDashboard();
+        else showAuth();
+      } else {
+        showWebsite();
+      }
+    };
+
+    function installAppDirectly() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          deferredPrompt = null;
+        });
+      } else {
+        document.getElementById("installGuideModal").classList.remove("hidden");
+      }
+    }
+
+    function openDirectAppMode() {
+      if (currentUser) showDashboard();
+      else showAuth();
+    }
+
+    function showWebsite() {
+      document.getElementById("websiteView").classList.remove("hidden");
+      document.getElementById("appAuthView").classList.add("hidden");
+      document.getElementById("appDashboardView").classList.add("hidden");
+    }
+
+    function showAuth() {
+      document.getElementById("websiteView").classList.add("hidden");
+      document.getElementById("appDashboardView").classList.add("hidden");
+      document.getElementById("appAuthView").classList.remove("hidden");
+    }
+
+    function showDashboard() {
+      document.getElementById("websiteView").classList.add("hidden");
+      document.getElementById("appAuthView").classList.add("hidden");
+      document.getElementById("appDashboardView").classList.remove("hidden");
+      document.getElementById("walletVal").innerText = "₹" + (currentUser.wallet || 0);
+
+      const upiUrl = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=Dhan%20Varsha%20Club&am=50&cu=INR&tn=Pool%20Entry`;
+      document.getElementById("upiLink").setAttribute("href", upiUrl);
+    }
+
+    function toggleAuth(mode) {
+      authMode = mode;
+      const isReg = mode === "reg";
+      document.getElementById("tabRegBtn").className = isReg ? "flex-1 py-2 text-xs font-black rounded-lg bg-amber-500 text-slate-950 transition" : "flex-1 py-2 text-xs font-bold text-slate-400 transition";
+      document.getElementById("tabLogBtn").className = !isReg ? "flex-1 py-2 text-xs font-black rounded-lg bg-amber-500 text-slate-950 transition" : "flex-1 py-2 text-xs font-bold text-slate-400 transition";
+      document.getElementById("nameInputWrapper").classList.toggle("hidden", !isReg);
+      document.getElementById("refInputWrapper").classList.toggle("hidden", !isReg);
+    }
+
+    function handleAuth(e) {
+      e.preventDefault();
+      const phone = document.getElementById("userPhone").value.trim();
+      const name = document.getElementById("userName").value.trim() || "Player " + phone.slice(-4);
+      if (phone.length !== 10) return alert("कृपया 10 अंकों का फोन नंबर डालें!");
+
+      currentUser = { name, phone, wallet: 0, referralCode: "DVC" + phone.slice(-4) };
+      localStorage.setItem("dvc_user", JSON.stringify(currentUser));
+      showDashboard();
+    }
+
+    function logout() {
+      localStorage.removeItem("dvc_user");
+      currentUser = null;
+      showWebsite();
+    }
+
+    function openPayment() {
+      document.getElementById("paymentModal").classList.remove("hidden");
+    }
+
+    function confirmSeat() {
+      document.getElementById("paymentModal").classList.add("hidden");
+      poolEntries++;
+      document.getElementById("poolCount").innerText = poolEntries;
+      document.getElementById("poolSeats").innerText = `${50 - poolEntries} Seats Left`;
+      document.getElementById("poolBar").style.width = `${(poolEntries / 50) * 100}%`;
+
+      if (poolEntries >= 50) {
+        document.getElementById("poolPayBtn").classList.add("hidden");
+        document.getElementById("timerBox").classList.remove("hidden");
+        let sec = 10;
+        const timer = setInterval(() => {
+          sec--;
+          document.getElementById("timerSec").innerText = sec < 10 ? "0" + sec : sec;
+          if (sec <= 0) {
+            clearInterval(timer);
+            document.getElementById("timerBox").classList.add("hidden");
+            confetti({ particleCount: 100, spread: 70 });
+            currentUser.wallet = (currentUser.wallet || 0) + 500;
+            localStorage.setItem("dvc_user", JSON.stringify(currentUser));
+            document.getElementById("walletVal").innerText = "₹" + currentUser.wallet;
+            alert("🎉 बधाई हो! आप 1st विजेता बने हैं और ₹500 आपके वॉलेट में जुड़ गए हैं!");
+            poolEntries = 0;
+            document.getElementById("poolCount").innerText = 0;
+            document.getElementById("poolSeats").innerText = "50 Seats Left";
+            document.getElementById("poolBar").style.width = "0%";
+            document.getElementById("poolPayBtn").classList.remove("hidden");
+          }
+        }, 1000);
+      }
+    }
+
+    function shareWhatsApp() {
+      const msg = encodeURIComponent(`🔥 धन वर्षा क्लब 🔥\n₹50 लगाकर अपनी किस्मत आजमाएं और ₹500 तक जीतें!\n${window.location.origin + window.location.pathname}`);
+      window.open(`https://api.whatsapp.com/send?text=${msg}`, "_blank");
+    }
+  </script>
+</body>
+</html>
